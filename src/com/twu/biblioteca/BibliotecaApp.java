@@ -7,10 +7,10 @@ public class BibliotecaApp {
 
 
     public static void main(String[] args) {
-
+        Menu menu = new Menu();
         String[][] listOfBooks = {book1, book2, book3};
 
-        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        System.out.println(menu.getWelcomeMessage());
 //
 //        BufferedReader reader =
 //                new BufferedReader(new InputStreamReader(System.in));

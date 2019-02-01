@@ -11,6 +11,11 @@ public class BibliotecaApp {
         String[][] listOfBooks = {book1, book2, book3};
 
         System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+//
+//        BufferedReader reader =
+//                new BufferedReader(new InputStreamReader(System.in));
+//        String input = reader.readLine();
+
         for (String[] book: listOfBooks) {
             Book newBook = new Book(book[0], book[1], book[2], book[3]);
             System.out.println(newBook.getBookInformation());

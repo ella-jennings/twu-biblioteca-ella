@@ -5,6 +5,7 @@ public class Book {
     private String firstName;
     private String lastName;
     private String publishedDate;
+
     public Book(String title, String firstName, String lastName, String publishedDate) {
         this.title = title;
         this.firstName = firstName;

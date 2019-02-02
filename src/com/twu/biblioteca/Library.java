@@ -14,7 +14,10 @@ public class Library {
         listOfBooks = Arrays.asList(book1, book2, book3);
     }
 
-    public List<Book> getAllBooks() {
-        return listOfBooks;
+
+    public String displayBookInformation() {
+        String bookInformation = "";
+        for(Book book: listOfBooks) bookInformation += String.format(book.getBookInformation() + "\n");
+        return bookInformation;
     }
 }

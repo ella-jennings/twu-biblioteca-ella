@@ -14,10 +14,7 @@ public class BibliotecaApp {
 //        BufferedReader reader =
 //                new BufferedReader(new InputStreamReader(System.in));
 //        String input = reader.readLine();
-        List<Book> booksList = library.getAllBooks();
-        for (Book book: booksList) {
-            System.out.println(book.getBookInformation());
-        }
+        System.out.print(library.displayBookInformation());
     }
 
 }

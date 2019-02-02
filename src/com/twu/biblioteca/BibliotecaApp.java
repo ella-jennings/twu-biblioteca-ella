@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import java.util.List;
+
 public class BibliotecaApp {
 
     public static void main(String[] args) {
@@ -7,12 +9,13 @@ public class BibliotecaApp {
         Library library = new Library();
 
         System.out.println(menu.getWelcomeMessage());
+        System.out.println(menu.getMenuOptions());
 //
 //        BufferedReader reader =
 //                new BufferedReader(new InputStreamReader(System.in));
 //        String input = reader.readLine();
-
-        for (Book book: library.getAllBooks()) {
+        List<Book> booksList = library.getAllBooks();
+        for (Book book: booksList) {
             System.out.println(book.getBookInformation());
         }
     }

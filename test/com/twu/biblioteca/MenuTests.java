@@ -15,8 +15,8 @@ public class MenuTests {
     @Test
     public void GetMenuOptionsShouldReturnAvailableOptions() {
         Menu menu = new Menu();
-        String[] result = menu.getMenuOptions();
+        String result = menu.getMenuOptions();
 
-        Assert.assertEquals("1 - List Of Books", result[0]);
+        Assert.assertEquals("1 - List Of Books", result);
     }
 }

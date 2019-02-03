@@ -90,8 +90,12 @@ public class ConsoleTests {
 
     @Test
     public void UserCanCheckOutBook() throws IOException {
-        when(reader.readLine()).thenReturn("1", "Dark Places");
+        String bookName = "Dark Places";
+        String messageToUser = "message";
+        when(reader.readLine()).thenReturn("1", bookName);
+        when(mockLibrary.checkOut(bookName)).thenReturn(messageToUser);
         console.ProcessUserInput();
-        verify(mockLibrary, times(1)).checkOut("Dark Places");
+        verify(mockLibrary, times(1)).checkOut(bookName);
+        verify(consolePrinter, times(1)).printLine(messageToUser);
     }
 }

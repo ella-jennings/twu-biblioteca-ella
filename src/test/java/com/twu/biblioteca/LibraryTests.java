@@ -21,9 +21,10 @@ public class LibraryTests {
     }
 
     @Test
-    public void CheckingOutBookShouldRemoveItFromBooksList(){
+    public void CheckingOutBookShouldRemoveItFromBooksListAndReturnSuccess(){
         Library library = new Library(Arrays.asList(book1, book2, book3));
-        library.checkOut("Talent Is Overrated");
+        String successMessage = library.checkOut("Talent Is Overrated");
+        assertEquals("Thank you! Enjoy the book", successMessage);
         String result = library.getBookInformation();
         String expectedResult = "Dark Places | Flynn, G | 2011\nFactfulness | Rosling, H | 2018\n";
         assertEquals(expectedResult, result);

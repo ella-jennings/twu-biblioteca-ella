@@ -22,12 +22,14 @@ class Library {
         return bookInformation.toString();
     }
 
-    void checkOut(String bookName) {
+    String checkOut(String bookName) {
         for(Book book: listOfBooks){
             if(book.getTitle().equals(bookName)){
                 book.checkOut();
+                return "Thank you! Enjoy the book";
             }
         }
+        return "";
     }
 }
 

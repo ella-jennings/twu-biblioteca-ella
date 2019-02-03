@@ -50,6 +50,7 @@ public class Console {
 
     private void checkoutBook() throws IOException {
         consolePrinter.printLine("Enter book title to check out:");
-        library.checkOut(reader.readLine());
+        String userInput = reader.readLine();
+        consolePrinter.printLine(library.checkOut(userInput));
     }
 }

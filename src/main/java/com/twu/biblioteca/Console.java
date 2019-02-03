@@ -8,7 +8,7 @@ import java.util.Map;
 public class Console {
     private final ConsolePrinter consolePrinter;
     private BufferedReader reader;
-    private ILibrary library;
+    private Library library;
     private static final Map<String, String> MENU_OPTIONS = new HashMap<String, String>() {
         {
             put("1", "List Of Books");
@@ -17,7 +17,7 @@ public class Console {
     };
     private static final String ERROR_MESSAGE = "Please select a valid option!";
 
-    Console(ILibrary library, ConsolePrinter consolePrinter, BufferedReader reader) throws IOException {
+    Console(Library library, ConsolePrinter consolePrinter, BufferedReader reader) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
@@ -38,6 +38,7 @@ public class Console {
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
+            checkoutBook();
         }
         if(userInput.equals("Q")) {
             System.exit(0);
@@ -45,5 +46,10 @@ public class Console {
         else {
             consolePrinter.printLine(ERROR_MESSAGE);
         }
+    }
+
+    private void checkoutBook() throws IOException {
+        consolePrinter.printLine("Enter book title to check out:");
+        library.checkOut(reader.readLine());
     }
 }

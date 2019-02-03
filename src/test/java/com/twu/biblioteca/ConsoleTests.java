@@ -63,6 +63,7 @@ public class ConsoleTests {
         console.ProcessUserInput();
         verify(mockLibrary, times(1)).getBookInformation();
         verify(consolePrinter, times(1)).print(BOOKINFO);
+        verify(consolePrinter, times(1)).printLine("Enter book title to check out:");
     }
 
     @Test
@@ -80,11 +81,17 @@ public class ConsoleTests {
         verify(consolePrinter, times(4)).printLine("Please select a valid option!");
     }
 
-
     @Test
     public void UserInputQWillQuitApplication() throws IOException {
         when(reader.readLine()).thenReturn("Q");
         exit.expectSystemExitWithStatus(0);
         console.ProcessUserInput();
+    }
+
+    @Test
+    public void UserCanCheckOutBook() throws IOException {
+        when(reader.readLine()).thenReturn("1", "Dark Places");
+        console.ProcessUserInput();
+        verify(mockLibrary, times(1)).checkOut("Dark Places");
     }
 }

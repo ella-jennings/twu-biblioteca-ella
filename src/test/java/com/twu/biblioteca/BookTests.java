@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class BookTests {
@@ -14,5 +15,13 @@ public class BookTests {
         Book book = new Book(testBook[0], testBook[1], testBook[2], testBook[3]);
         String result = book.getBookInformation();
         assertThat(result, is(equalTo("Dark Places | Flynn, G | 2011")));
+    }
+
+    @Test
+    public void CheckoutBookSetsOnLoanAsTrue(){
+        Book book = new Book(testBook[0], testBook[1], testBook[2], testBook[3]);
+        assertEquals(false, book.getOnLoan());
+        book.checkOut();
+        assertEquals(true, book.getOnLoan());
     }
 }

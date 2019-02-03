@@ -8,7 +8,7 @@ public class Console {
     private BufferedReader reader;
     private ILibrary library;
 
-    public Console(ILibrary library, ConsolePrinter consolePrinter, BufferedReader reader) {
+    public Console(ILibrary library, ConsolePrinter consolePrinter, BufferedReader reader) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
@@ -25,6 +25,9 @@ public class Console {
 
         if(userInput.equals("1")){
             consolePrinter.print(library.getBookInformation());
+        }
+        else {
+            consolePrinter.printLine("Please select a valid option!");
         }
     }
 }

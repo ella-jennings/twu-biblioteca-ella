@@ -27,7 +27,7 @@ public class ConsoleTests {
     BufferedReader reader;
 
     @Before
-    public void SetUp() {
+    public void SetUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         when(mockLibrary.getBookInformation()).thenReturn(BOOKINFO);
         console = new Console(mockLibrary, consolePrinter, reader);
@@ -54,10 +54,25 @@ public class ConsoleTests {
     }
 
     @Test
-    public void ProcessUserInputCallsLibraryDisplayBooks() throws IOException {
+    public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
         when(reader.readLine()).thenReturn("1");
         console.ProcessUserInput();
         verify(mockLibrary, times(1)).getBookInformation();
         verify(consolePrinter, times(1)).print(BOOKINFO);
+    }
+
+    @Test
+    public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelected() throws IOException {
+        when(reader.readLine()).thenReturn("a");
+        console.ProcessUserInput();
+        when(reader.readLine()).thenReturn("2");
+        console.ProcessUserInput();
+        when(reader.readLine()).thenReturn("£");
+        console.ProcessUserInput();
+        when(reader.readLine()).thenReturn(" ");
+        console.ProcessUserInput();
+
+        verify(mockLibrary, times(0)).getBookInformation();
+        verify(consolePrinter, times(4)).printLine("Please select a valid option!");
     }
 }

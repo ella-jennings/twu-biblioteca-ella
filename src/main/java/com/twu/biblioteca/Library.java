@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Library implements ILibrary {
 
-    static Book book1 = new Book("Dark Places", "Gillian", "Flynn", "2011");
-    static Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", "2008");
-    static Book book3 = new Book("Factfulness", "Hans", "Rosling", "2018");
+    private static Book book1 = new Book("Dark Places", "Gillian", "Flynn", "2011");
+    private static Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", "2008");
+    private static Book book3 = new Book("Factfulness", "Hans", "Rosling", "2018");
     private List<Book> listOfBooks;
 
-    public Library() {
+    Library() {
         listOfBooks = Arrays.asList(book1, book2, book3);
     }
 
 
     public String getBookInformation() {
-        String bookInformation = "";
-        for(Book book: listOfBooks) bookInformation += String.format(book.getBookInformation() + "\n");
-        return bookInformation;
+        StringBuilder bookInformation = new StringBuilder();
+        for(Book book: listOfBooks) bookInformation.append(book.getBookInformation()).append("\n");
+        return bookInformation.toString();
     }
 }
 

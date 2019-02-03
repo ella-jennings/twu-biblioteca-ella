@@ -14,8 +14,8 @@ public class Book {
 
     }
 
-    public String getBookInformation() {
+    String getBookInformation() {
         String columnSeparator = " | ";
-        return String.format(this.title + columnSeparator + this.lastName + ", " + this.firstName.substring(0,1) + columnSeparator + publishedDate );
+        return this.title + columnSeparator + this.lastName + ", " + this.firstName.substring(0,1) + columnSeparator + publishedDate;
     }
 }

@@ -1,7 +1,9 @@
 package com.twu.biblioteca;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -10,14 +12,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
 
 
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books";
-    private static final String BOOKINFO ="here is some book information";
+    private static final String MENU = "1 - List Of Books\nQ - Quit\n";
+    private static final String BOOKINFO = "here is some book information";
 
     @Mock
     Library mockLibrary;
@@ -25,6 +26,9 @@ public class ConsoleTests {
     ConsolePrinter consolePrinter;
     @Mock
     BufferedReader reader;
+
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     @Before
     public void SetUp() throws IOException {
@@ -42,14 +46,14 @@ public class ConsoleTests {
     @Test
     public void InitialisingConsoleShouldPrintMenuOptions() {
 
-        verify(consolePrinter).printLine(MENU);
+        verify(consolePrinter).print(MENU);
     }
 
     @Test
     public void InitialisingConsolePrintsOptionsInCorrectOrder() {
         InOrder orderVerifier = inOrder(consolePrinter);
         orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(consolePrinter).printLine(MENU);
+        orderVerifier.verify(consolePrinter).print(MENU);
         orderVerifier.verifyNoMoreInteractions();
     }
 
@@ -74,5 +78,13 @@ public class ConsoleTests {
 
         verify(mockLibrary, times(0)).getBookInformation();
         verify(consolePrinter, times(4)).printLine("Please select a valid option!");
+    }
+
+
+    @Test
+    public void UserInputQWillQuitApplication() throws IOException {
+        when(reader.readLine()).thenReturn("Q");
+        exit.expectSystemExitWithStatus(0);
+        console.ProcessUserInput();
     }
 }

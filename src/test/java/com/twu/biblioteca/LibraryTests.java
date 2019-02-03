@@ -47,6 +47,14 @@ public class LibraryTests {
     }
 
     @Test
+    public void ShouldNotCheckoutBookWhenAlreadyLoanedAndReturnFailure() {
+        library.checkOut(book2.getTitle());
+        assertEquals(true, book2.isOnLoan());
+        String expectedFailureMessage = library.checkOut(book2.getTitle());
+        assertEquals("Sorry, that book is not available", expectedFailureMessage);
+    }
+
+    @Test
     public void ReturnBookShouldReturnBookAndReturnSuccess() {
         library.checkOut(book2.getTitle());
         String expectedSuccessMessage = library.returnBook(book2.getTitle());
@@ -60,6 +68,14 @@ public class LibraryTests {
         library.checkOut(book2.getTitle());
         String expectedFailureMessage = library.returnBook(INVALID_TITLE);
         assertEquals("That is not a valid book to return.", expectedFailureMessage);
+    }
+
+    @Test
+    public void BookNotOnLoanCannotBeReturned(){
+        assertEquals(false, book2.isOnLoan());
+        String expectedFailureMessage = library.returnBook(book2.getTitle());
+        assertEquals("That is not a valid book to return.", expectedFailureMessage);
+
     }
 
 }

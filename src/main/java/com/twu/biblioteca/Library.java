@@ -23,7 +23,7 @@ class Library {
 
     String checkOut(String bookName) {
         for(Book book: listOfBooks){
-            if(book.getTitle().equals(bookName)){
+            if(book.getTitle().equals(bookName) && !book.isOnLoan()){
                 book.checkOut();
                 return "Thank you! Enjoy the book";
             }
@@ -33,7 +33,7 @@ class Library {
 
     String returnBook(String bookName){
         for(Book book: listOfBooks){
-            if(book.getTitle().equals(bookName)){
+            if(book.getTitle().equals(bookName) && book.isOnLoan()){
                 book.returnBook();
                 return "Thank you for returning the book";
             }

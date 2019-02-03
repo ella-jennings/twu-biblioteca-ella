@@ -41,10 +41,11 @@ public class LibraryTests {
     }
 
     @Test
-    public void ReturnBookShouldReturnBook() {
+    public void ReturnBookShouldReturnBookAndReturnSuccess() {
         Library library = new Library(Arrays.asList(book1, book2, book3));
         library.checkOut("Talent Is Overrated");
-        library.returnBook("Talent Is Overrated");
+        String expectedSuccessMessage = library.returnBook("Talent Is Overrated");
+        assertEquals("Thank you for returning the book", expectedSuccessMessage);
         String expectedResult = booksInformationAll;
         assertEquals(expectedResult, expectedResult);
     }

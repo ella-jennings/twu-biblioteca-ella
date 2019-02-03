@@ -41,7 +41,7 @@ public class Console {
         }
         if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
-            library.returnBook(userResponse);
+            consolePrinter.printLine(library.returnBook(userResponse));
             consolePrinter.print(getMenuOptions());
         }
         if(userInput.equals("Q")) {

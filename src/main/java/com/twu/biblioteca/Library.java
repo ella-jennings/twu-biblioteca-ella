@@ -31,12 +31,14 @@ class Library {
         return "Sorry, that book is not available";
     }
 
-    void returnBook(String bookName){
+    String returnBook(String bookName){
         for(Book book: listOfBooks){
             if(book.getTitle().equals(bookName)){
                 book.returnBook();
+                return "Thank you for returning the book";
             }
         }
+        return "";
     }
 }
 

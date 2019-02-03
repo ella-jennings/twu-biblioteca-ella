@@ -109,11 +109,14 @@ public class ConsoleTests {
 
     @Test public void UserCanReturnBook() throws IOException {
         String bookName = "Dark Places";
+        String messageToUser = "message";
         when(reader.readLine()).thenReturn("3", bookName);
+        when(mockLibrary.returnBook(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
         InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
         orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
+        orderVerifier.verify(consolePrinter).printLine(messageToUser);
         orderVerifier.verify(consolePrinter).print(MENU);
     }
 }

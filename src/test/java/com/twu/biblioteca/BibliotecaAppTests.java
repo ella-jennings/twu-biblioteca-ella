@@ -22,20 +22,20 @@ public class BibliotecaAppTests {
         System.setOut(System.out);
     }
 
-    @Test
-    public void StartingApplicationShouldDisplayWelcome() {
-        new BibliotecaApp().main(null);
-        String output[] = outContent.toString().split("\n");
-        assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!", output[0]);
-    }
-
-    @Test
-    public void StartingApplicationShouldDisplayMenuOptions() {
-        new BibliotecaApp().main(null);
-        String output[] = outContent.toString().split("\n");
-
-        assertEquals("1 - List Of Books", output[1]);
-    }
+//    @Test
+//    public void StartingApplicationShouldDisplayWelcome() {
+//        new BibliotecaApp().main(null);
+//        String output[] = outContent.toString().split("\n");
+//        assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!", output[0]);
+//    }
+//
+//    @Test
+//    public void StartingApplicationShouldDisplayMenuOptions() {
+//        new BibliotecaApp().main(null);
+//        String output[] = outContent.toString().split("\n");
+//
+//        assertEquals("1 - List Of Books", output[1]);
+//    }
 
 
 //    @Test

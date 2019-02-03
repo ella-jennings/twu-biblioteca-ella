@@ -15,7 +15,7 @@ public class Library implements ILibrary {
     }
 
 
-    public String displayBookInformation() {
+    public String getBookInformation() {
         String bookInformation = "";
         for(Book book: listOfBooks) bookInformation += String.format(book.getBookInformation() + "\n");
         return bookInformation;

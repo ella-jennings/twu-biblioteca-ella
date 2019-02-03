@@ -1,15 +1,14 @@
 package com.twu.biblioteca;
 
 public class Console {
+    private final ConsolePrinter consolePrinter;
     private ILibrary library;
 
-    public Console(ILibrary library) {
-
+    public Console(ILibrary library, ConsolePrinter consolePrinter) {
         this.library = library;
-    }
-
-    public String getWelcomeMessage() {
-        return "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
+        this.consolePrinter = consolePrinter;
+        this.consolePrinter.printLine("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
+        this.consolePrinter.printLine(getMenuOptions());
     }
 
     public String getMenuOptions() {

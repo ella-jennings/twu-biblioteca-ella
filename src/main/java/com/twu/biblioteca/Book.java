@@ -5,21 +5,20 @@ class Book {
     private String firstName;
     private String lastName;
     private String publishedDate;
-    private Boolean onLoan;
+    private Boolean onLoan = false;
 
     Book(String title, String firstName, String lastName, String publishedDate) {
         this.title = title;
         this.firstName = firstName;
         this.lastName = lastName;
         this.publishedDate = publishedDate;
-        this.onLoan = false;
     }
 
     String getTitle() {
         return title;
     }
 
-    Boolean getOnLoan() {
+    Boolean isOnLoan() {
         return onLoan;
     }
 
@@ -31,4 +30,5 @@ class Book {
     void checkOut() {
         this.onLoan = true;
     }
+    void returnBook() {this.onLoan = false;}
 }

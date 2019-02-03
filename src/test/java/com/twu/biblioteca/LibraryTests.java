@@ -21,7 +21,7 @@ public class LibraryTests {
     }
 
     @Test
-    public void CheckingOutBookShouldRemoveItFromBooksListAndReturnSuccess(){
+    public void CheckingOutBookShouldRemoveItFromBooksListAndReturnSuccess() {
         Library library = new Library(Arrays.asList(book1, book2, book3));
         String expectedSuccessMessage = library.checkOut("Talent Is Overrated");
         assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
@@ -31,7 +31,7 @@ public class LibraryTests {
     }
 
     @Test
-    public void InvalidBookNameShouldNotCHeckoutBookAndReturnFailure(){
+    public void InvalidBookNameShouldNotCHeckoutBookAndReturnFailure() {
         Library library = new Library(Arrays.asList(book1, book2, book3));
         String expectedFailureMessage = library.checkOut("Talant Is over-raated");
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
@@ -39,4 +39,15 @@ public class LibraryTests {
         String expectedResult = booksInformationAll;
         assertEquals(expectedResult, result);
     }
+
+    @Test
+    public void ReturnBookShouldReturnBook() {
+        Library library = new Library(Arrays.asList(book1, book2, book3));
+        library.checkOut("Talent Is Overrated");
+        library.returnBook("Talent Is Overrated");
+        String expectedResult = booksInformationAll;
+        assertEquals(expectedResult, expectedResult);
+    }
+
 }
+

@@ -18,10 +18,12 @@ public class BookTests {
     }
 
     @Test
-    public void CheckoutBookSetsOnLoanAsTrue(){
+    public void CheckoutBookSetsOnLoanAsTrue_ReturnSetsOnLoanAsFalse(){
         Book book = new Book(testBook[0], testBook[1], testBook[2], testBook[3]);
-        assertEquals(false, book.getOnLoan());
+        assertEquals(false, book.isOnLoan());
         book.checkOut();
-        assertEquals(true, book.getOnLoan());
+        assertEquals(true, book.isOnLoan());
+        book.returnBook();
+        assertEquals(false, book.isOnLoan());
     }
 }

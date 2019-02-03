@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\nQ - Quit\n";
+    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\nQ - Quit\n";
     private static final String BOOKINFO = "here is some book information";
 
     @Mock
@@ -102,11 +102,18 @@ public class ConsoleTests {
         when(mockLibrary.checkOut(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
-        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(consolePrinter).print(MENU);
-        orderVerifier.verify(consolePrinter).printLine("Enter book title to check out:");
         orderVerifier.verify(mockLibrary).checkOut(bookName);
         orderVerifier.verify(consolePrinter).printLine(messageToUser);
+        orderVerifier.verify(consolePrinter).print(MENU);
+    }
+
+    @Test public void UserCanReturnBook() throws IOException {
+        String bookName = "Dark Places";
+        when(reader.readLine()).thenReturn("3", bookName);
+        console.processUserInput();
+
+        InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
+        orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
         orderVerifier.verify(consolePrinter).print(MENU);
     }
 }

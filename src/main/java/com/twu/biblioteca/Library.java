@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import java.util.Arrays;
 import java.util.List;
 
 class Library {
@@ -15,7 +14,7 @@ class Library {
     String getBookInformation() {
         StringBuilder bookInformation = new StringBuilder();
         for(Book book: listOfBooks) {
-            if(!book.getOnLoan()){
+            if(!book.isOnLoan()){
                 bookInformation.append(book.getBookInformation()).append("\n");
             }
         }
@@ -30,6 +29,14 @@ class Library {
             }
         }
         return "Sorry, that book is not available";
+    }
+
+    void returnBook(String bookName){
+        for(Book book: listOfBooks){
+            if(book.getTitle().equals(bookName)){
+                book.returnBook();
+            }
+        }
     }
 }
 

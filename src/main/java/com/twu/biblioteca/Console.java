@@ -13,6 +13,7 @@ public class Console {
         {
             put("1", "List Of Books");
             put("2", "Checkout a Book");
+            put("3", "Return a Book");
             put("Q", "Quit");
         }
     };
@@ -26,14 +27,6 @@ public class Console {
         this.consolePrinter.print(getMenuOptions());
     }
 
-    private String getMenuOptions() {
-        StringBuilder options = new StringBuilder();
-        for(Map.Entry<String, String> entry: MENU_OPTIONS.entrySet()){
-            options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
-        }
-        return options.toString();
-    }
-
     void processUserInput() throws IOException {
         String userInput = reader.readLine();
 
@@ -42,7 +35,13 @@ public class Console {
             consolePrinter.print(getMenuOptions());
         }
         if (userInput.equals("2")){
-            checkoutBook();
+            String userResponse = getBookTitleFromUser("check out");
+            consolePrinter.printLine(library.checkOut(userResponse));
+            consolePrinter.print(getMenuOptions());
+        }
+        if (userInput.equals("3")){
+            String userResponse = getBookTitleFromUser("return");
+            library.returnBook(userResponse);
             consolePrinter.print(getMenuOptions());
         }
         if(userInput.equals("Q")) {
@@ -53,9 +52,16 @@ public class Console {
         }
     }
 
-    private void checkoutBook() throws IOException {
-        consolePrinter.printLine("Enter book title to check out:");
-        String userInput = reader.readLine();
-        consolePrinter.printLine(library.checkOut(userInput));
+    private String getMenuOptions() {
+        StringBuilder options = new StringBuilder();
+        for(Map.Entry<String, String> entry: MENU_OPTIONS.entrySet()){
+            options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
+        }
+        return options.toString();
+    }
+
+    private String getBookTitleFromUser(String function) throws IOException {
+        consolePrinter.printLine("Enter book title to " + function + ":");
+        return reader.readLine();
     }
 }

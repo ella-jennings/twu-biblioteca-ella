@@ -29,7 +29,7 @@ class Library {
                 return "Thank you! Enjoy the book";
             }
         }
-        return "";
+        return "Sorry, that book is not available";
     }
 }
 

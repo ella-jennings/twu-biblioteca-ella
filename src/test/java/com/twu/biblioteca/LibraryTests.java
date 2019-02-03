@@ -23,10 +23,20 @@ public class LibraryTests {
     @Test
     public void CheckingOutBookShouldRemoveItFromBooksListAndReturnSuccess(){
         Library library = new Library(Arrays.asList(book1, book2, book3));
-        String successMessage = library.checkOut("Talent Is Overrated");
-        assertEquals("Thank you! Enjoy the book", successMessage);
+        String expectedSuccessMessage = library.checkOut("Talent Is Overrated");
+        assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
         String result = library.getBookInformation();
         String expectedResult = "Dark Places | Flynn, G | 2011\nFactfulness | Rosling, H | 2018\n";
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void InvalidBookNameShouldNotCHeckoutBookAndReturnFailure(){
+        Library library = new Library(Arrays.asList(book1, book2, book3));
+        String expectedFailureMessage = library.checkOut("Talant Is over-raated");
+        assertEquals("Sorry, that book is not available", expectedFailureMessage);
+        String result = library.getBookInformation();
+        String expectedResult = booksInformationAll;
         assertEquals(expectedResult, result);
     }
 }

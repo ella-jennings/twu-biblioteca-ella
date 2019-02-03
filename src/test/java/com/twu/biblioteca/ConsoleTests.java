@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books\nQ - Quit\n";
+    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\nQ - Quit\n";
     private static final String BOOKINFO = "here is some book information";
 
     @Mock
@@ -35,7 +35,6 @@ public class ConsoleTests {
         MockitoAnnotations.initMocks(this);
         when(mockLibrary.getBookInformation()).thenReturn(BOOKINFO);
         console = new Console(mockLibrary, consolePrinter, reader);
-
     }
 
     @Test
@@ -60,42 +59,54 @@ public class ConsoleTests {
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
         when(reader.readLine()).thenReturn("1");
-        console.ProcessUserInput();
-        verify(mockLibrary, times(1)).getBookInformation();
-        verify(consolePrinter, times(1)).print(BOOKINFO);
-        verify(consolePrinter, times(1)).printLine("Enter book title to check out:");
+        console.processUserInput();
+        InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
+        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockLibrary).getBookInformation();
+        orderVerifier.verify(consolePrinter).print(MENU);
     }
 
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelected() throws IOException {
         when(reader.readLine()).thenReturn("a");
-        console.ProcessUserInput();
-        when(reader.readLine()).thenReturn("2");
-        console.ProcessUserInput();
+        console.processUserInput();
+        when(reader.readLine()).thenReturn("12");
+        console.processUserInput();
         when(reader.readLine()).thenReturn("£");
-        console.ProcessUserInput();
+        console.processUserInput();
         when(reader.readLine()).thenReturn(" ");
-        console.ProcessUserInput();
+        console.processUserInput();
 
-        verify(mockLibrary, times(0)).getBookInformation();
-        verify(consolePrinter, times(4)).printLine("Please select a valid option!");
+        InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
+        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(consolePrinter, times(4)).printLine("Please select a valid option!");
+
     }
 
     @Test
     public void UserInputQWillQuitApplication() throws IOException {
         when(reader.readLine()).thenReturn("Q");
         exit.expectSystemExitWithStatus(0);
-        console.ProcessUserInput();
+        console.processUserInput();
     }
 
     @Test
     public void UserCanCheckOutBook() throws IOException {
         String bookName = "Dark Places";
         String messageToUser = "message";
-        when(reader.readLine()).thenReturn("1", bookName);
+        InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
+
+        when(reader.readLine()).thenReturn("2", bookName);
         when(mockLibrary.checkOut(bookName)).thenReturn(messageToUser);
-        console.ProcessUserInput();
-        verify(mockLibrary, times(1)).checkOut(bookName);
-        verify(consolePrinter, times(1)).printLine(messageToUser);
+        console.processUserInput();
+
+        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(consolePrinter).printLine("Enter book title to check out:");
+        orderVerifier.verify(mockLibrary).checkOut(bookName);
+        orderVerifier.verify(consolePrinter).printLine(messageToUser);
+        orderVerifier.verify(consolePrinter).print(MENU);
     }
 }

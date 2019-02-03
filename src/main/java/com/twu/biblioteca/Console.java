@@ -2,16 +2,17 @@ package com.twu.biblioteca;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Console {
     private final ConsolePrinter consolePrinter;
     private BufferedReader reader;
     private Library library;
-    private static final Map<String, String> MENU_OPTIONS = new HashMap<String, String>() {
+    private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
             put("1", "List Of Books");
+            put("2", "Checkout a Book");
             put("Q", "Quit");
         }
     };
@@ -33,12 +34,16 @@ public class Console {
         return options.toString();
     }
 
-    void ProcessUserInput() throws IOException {
+    void processUserInput() throws IOException {
         String userInput = reader.readLine();
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
+            consolePrinter.print(getMenuOptions());
+        }
+        if (userInput.equals("2")){
             checkoutBook();
+            consolePrinter.print(getMenuOptions());
         }
         if(userInput.equals("Q")) {
             System.exit(0);

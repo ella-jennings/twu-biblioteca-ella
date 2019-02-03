@@ -15,7 +15,7 @@ public class BibliotecaApp {
         Library library = new Library(Arrays.asList(book1, book2, book3));
         ConsolePrinter consolePrinter = new ConsolePrinter();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        new Console(library, consolePrinter, reader).ProcessUserInput();
+        new Console(library, consolePrinter, reader).processUserInput();
     }
 
 }

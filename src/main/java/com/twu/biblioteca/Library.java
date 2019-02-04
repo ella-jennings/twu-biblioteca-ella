@@ -5,6 +5,7 @@ import java.util.List;
 class Library {
 
     private final List<Book> listOfBooks;
+//    private final List<Movie> listOfMovies;
 
     Library(List<Book> listOfBooks) {
         this.listOfBooks = listOfBooks;
@@ -39,6 +40,10 @@ class Library {
             }
         }
         return "That is not a valid book to return.";
+    }
+
+    public String getMovieInformation() {
+        return "";
     }
 }
 

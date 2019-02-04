@@ -9,9 +9,9 @@ import static org.junit.Assert.assertEquals;
 
 public class LibraryTests {
     private String booksInformationAll = "Dark Places | Flynn, G | 2011\nTalent Is Overrated | Colvin, G | 2008\nFactfulness | Rosling, H | 2018\n";
-    private Book book1 = new Book("Dark Places", "Gillian", "Flynn", "2011");
-    private Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", "2008");
-    private Book book3 = new Book("Factfulness", "Hans", "Rosling", "2018");
+    private Book book1 = new Book("Dark Places", "Gillian", "Flynn", 2011);
+    private Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", 2008);
+    private Book book3 = new Book("Factfulness", "Hans", "Rosling", 2018);
     private final String INVALID_TITLE = "Talant Is over-raated";
     private Library library;
 

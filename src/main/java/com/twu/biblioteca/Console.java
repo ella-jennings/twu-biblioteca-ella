@@ -14,17 +14,20 @@ public class Console {
             put("1", "List Of Books");
             put("2", "Checkout a Book");
             put("3", "Return a Book");
+            put("4", "List Of Movies");
             put("Q", "Quit");
         }
     };
     private static final String ERROR_MESSAGE = "Please select a valid option!";
+    private String menuOptions;
 
     Console(Library library, ConsolePrinter consolePrinter, BufferedReader reader) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
         this.consolePrinter.printLine("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
-        this.consolePrinter.print(getMenuOptions());
+        getMenuOptions();
+        this.consolePrinter.print(menuOptions);
     }
 
     void processUserInput() throws IOException {
@@ -32,18 +35,22 @@ public class Console {
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
-            consolePrinter.print(getMenuOptions());
+            consolePrinter.print(menuOptions);
         }
         if (userInput.equals("2")){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
-            consolePrinter.print(getMenuOptions());
+            consolePrinter.print(menuOptions);
         }
         if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
-            consolePrinter.print(getMenuOptions());
+            consolePrinter.print(menuOptions);
         }
+//        if (userInput.equals("4")){
+//            consolePrinter.print(library.getMovieInformation());
+//            consolePrinter.print(menuOptions);
+//        }
         if(userInput.equals("Q")) {
             System.exit(0);
         }
@@ -52,12 +59,12 @@ public class Console {
         }
     }
 
-    private String getMenuOptions() {
+    private void getMenuOptions() {
         StringBuilder options = new StringBuilder();
         for(Map.Entry<String, String> entry: MENU_OPTIONS.entrySet()){
             options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
         }
-        return options.toString();
+        menuOptions = options.toString();
     }
 
     private String getBookTitleFromUser(String function) throws IOException {

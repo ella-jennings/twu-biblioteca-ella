@@ -4,10 +4,10 @@ class Book {
     private String title;
     private String firstName;
     private String lastName;
-    private String publishedDate;
+    private int publishedDate;
     private Boolean onLoan = false;
 
-    Book(String title, String firstName, String lastName, String publishedDate) {
+    Book(String title, String firstName, String lastName, int publishedDate) {
         this.title = title;
         this.firstName = firstName;
         this.lastName = lastName;

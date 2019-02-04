@@ -18,13 +18,6 @@ public class BookTests {
     }
 
     @Test
-    public void BooksShouldContainTitleAuthorAndDateInformation() {
-        Book book = new Book(testBook[0], testBook[1], testBook[2], YEAR);
-        String result = book.getBookInformation();
-        assertThat(result, is(equalTo("Dark Places | Flynn, G | 2011")));
-    }
-
-    @Test
     public void CheckoutBookSetsOnLoanAsTrue_ReturnSetsOnLoanAsFalse(){
         Book book = new Book(testBook[0], testBook[1], testBook[2], YEAR);
         assertEquals(false, book.isOnLoan());

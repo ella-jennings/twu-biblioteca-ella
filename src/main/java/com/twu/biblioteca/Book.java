@@ -7,25 +7,34 @@ class Book {
     private int publishedDate;
     private Boolean onLoan = false;
 
-    Book(String title, String firstName, String lastName, int publishedDate) {
+    Book(String title, String firstName, String lastName, Integer publishedDate) {
         this.title = title;
         this.firstName = firstName;
         this.lastName = lastName;
         this.publishedDate = publishedDate;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Integer getPublishedDate() {
+        return publishedDate;
+    }
+
 
     Boolean isOnLoan() {
         return onLoan;
     }
 
-    String getBookInformation() {
-        String columnSeparator = " | ";
-        return this.title + columnSeparator + this.lastName + ", " + this.firstName.substring(0,1) + columnSeparator + publishedDate;
-    }
 
     void checkOut() {
         this.onLoan = true;

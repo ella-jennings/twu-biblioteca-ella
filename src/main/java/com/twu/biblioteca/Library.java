@@ -16,10 +16,15 @@ class Library {
         StringBuilder bookInformation = new StringBuilder();
         for(Book book: listOfBooks) {
             if(!book.isOnLoan()){
-                bookInformation.append(book.getBookInformation()).append("\n");
+                bookInformation.append(displayBookInformation(book));
             }
         }
         return bookInformation.toString();
+    }
+
+    private String displayBookInformation(Book book) {
+        String columnSeparator = " | ";
+        return book.getTitle() + columnSeparator + book.getLastName() + ", " + book.getFirstName().substring(0,1) + columnSeparator + book.getPublishedDate() + "\n";
     }
 
     String checkOut(String bookName) {
@@ -42,8 +47,8 @@ class Library {
         return "That is not a valid book to return.";
     }
 
-    public String getMovieInformation() {
-        return "";
-    }
+//    public String getMovieInformation() {
+//        return "";
+//    }
 }
 

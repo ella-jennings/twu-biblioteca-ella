@@ -48,4 +48,28 @@ FROM checkout_item
 WHERE checkout_item.movie_id = movie.id);
 
 -- 4. Add the book 'The Pragmatic Programmer', and add yourself as a member. Check out 'The Pragmatic Programmer'. Use your query from question 1 to verify that you have checked it out. Also, provide the SQL used to update the database.
+INSERT INTO book (title) VALUES ('The Pragmatic Programmer');
+INSERT INTO member (name) VALUES ('Ella Fahie');
+
+INSERT INTO checkout_item (member_id, book_id)
+VALUES(
+    (SELECT member.id 
+    FROM member
+    WHERE member.name = 'Ella Fahie'),
+    (SELECT book.id AS book_id
+    FROM book
+    WHERE book.title = 'The Pragmatic Programmer'
+    )
+);
 -- 5. Who has checked out more that 1 item? 
+-- Anand Beck
+-- Frank Smith
+
+SELECT member.name
+FROM member
+WHERE member.id IN (
+     SELECT checkout_item.member_id
+     FROM checkout_item
+     GROUP BY member_id
+     HAVING COUNT(*) > 1
+);

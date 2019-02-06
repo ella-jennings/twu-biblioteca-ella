@@ -37,12 +37,12 @@ public class Console {
             consolePrinter.print(library.getBookInformation());
             consolePrinter.print(menuOptions);
         }
-        if (userInput.equals("2")){
+        else if (userInput.equals("2")){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
             consolePrinter.print(menuOptions);
         }
-        if (userInput.equals("3")){
+        else if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
             consolePrinter.print(menuOptions);
@@ -51,7 +51,7 @@ public class Console {
 //            consolePrinter.print(library.getMovieInformation());
 //            consolePrinter.print(menuOptions);
 //        }
-        if(userInput.equals("Q")) {
+        else if(userInput.equals("Q")) {
             System.exit(0);
         }
         else {

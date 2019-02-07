@@ -39,17 +39,6 @@ public class ConsoleTests {
     }
 
     @Test
-    public void InitialisingConsoleShouldPrintWelcomeMessage() {
-        verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
-    }
-
-    @Test
-    public void InitialisingConsoleShouldPrintMenuOptions() {
-
-        verify(mockConsolePrinter).print(MENU);
-    }
-
-    @Test
     public void InitialisingConsolePrintsOptionsInCorrectOrder() {
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
@@ -58,12 +47,11 @@ public class ConsoleTests {
 
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("1");
+        when(mockConsoleReader.getNextLine()).thenReturn("1", "Q");
         console.processUserInput();
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockLibrary).getBookInformation();
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
     @Test
@@ -96,7 +84,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(mockLibrary).checkOut(bookName);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verifyNoMoreInteractions();
     }
 
     @Test public void UserCanReturnBook() throws IOException {
@@ -108,7 +96,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verifyNoMoreInteractions();
     }
 
     // Movie Tests

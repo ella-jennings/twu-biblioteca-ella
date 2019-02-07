@@ -29,7 +29,6 @@ public class Console {
         getMenuOptions();
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         this.consolePrinter.print(menuOptions);
-        processUserInput();
     }
 
     void processUserInput() throws IOException {
@@ -37,17 +36,14 @@ public class Console {
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
-            consolePrinter.print(menuOptions);
         }
         else if (userInput.equals("2")){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
-            consolePrinter.print(menuOptions);
         }
         else if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
-            consolePrinter.print(menuOptions);
         }
 //        if (userInput.equals("4")){
 //            consolePrinter.print(library.getMovieInformation());

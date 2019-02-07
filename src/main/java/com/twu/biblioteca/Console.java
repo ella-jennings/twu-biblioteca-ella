@@ -38,14 +38,17 @@ public class Console {
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
+            returnToMenu();
         }
         else if (userInput.equals("2")){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
+            returnToMenu();
         }
         else if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
+            returnToMenu();
         }
 //        if (userInput.equals("4")){
 //            consolePrinter.print(library.getMovieInformation());
@@ -66,6 +69,11 @@ public class Console {
             options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
         }
         menuOptions = options.toString();
+    }
+
+    private void returnToMenu() throws IOException {
+        consolePrinter.print(menuOptions);
+        processUserInput();
     }
 
     private String getBookTitleFromUser(String function) throws IOException {

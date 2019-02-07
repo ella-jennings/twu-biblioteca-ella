@@ -26,6 +26,8 @@ public class ConsoleTests {
     ConsolePrinter mockConsolePrinter;
     @Mock
     ConsoleReader mockConsoleReader;
+    @Mock
+    ConsoleTerminator mockConsoleTerminator;
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -34,7 +36,7 @@ public class ConsoleTests {
     public void SetUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         when(mockLibrary.getBookInformation()).thenReturn(BOOKINFO);
-        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator);
         orderVerifier = inOrder(mockConsolePrinter, mockLibrary);
     }
 
@@ -68,8 +70,8 @@ public class ConsoleTests {
     @Test
     public void UserInputQWillQuitApplication() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("Q");
-        exit.expectSystemExitWithStatus(0);
         console.processUserInput();
+        verify(mockConsoleTerminator, times(1)).exitApplication();
     }
 
     @Test

@@ -15,7 +15,8 @@ public class BibliotecaApp {
         Scanner scanner = new Scanner(System.in);
         ConsolePrinter consolePrinter = new ConsolePrinter();
         ConsoleReader reader = new ConsoleReader(scanner);
-        new Console(library, consolePrinter, reader).processUserInput();
+        ConsoleTerminator consoleTerminator = new ConsoleTerminator();
+        new Console(library, consolePrinter, reader, consoleTerminator).processUserInput();
     }
 
 }

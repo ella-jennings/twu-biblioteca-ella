@@ -7,6 +7,7 @@ import java.util.Map;
 public class Console {
     private final ConsolePrinter consolePrinter;
     private ConsoleReader reader;
+    private ConsoleTerminator consoleTerminator;
     private Library library;
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
@@ -22,10 +23,11 @@ public class Console {
     private String menuOptions;
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader) throws IOException {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
+        this.consoleTerminator = consoleTerminator;
         getMenuOptions();
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         this.consolePrinter.print(menuOptions);
@@ -50,7 +52,7 @@ public class Console {
 //            consolePrinter.print(menuOptions);
 //        }
         else if(userInput.equals("Q")) {
-            System.exit(0);
+            consoleTerminator.exitApplication();
         }
         else {
             consolePrinter.printLine(ERROR_MESSAGE);

@@ -1,13 +1,12 @@
 package com.twu.biblioteca;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Console {
     private final ConsolePrinter consolePrinter;
-    private BufferedReader reader;
+    private ConsoleReader reader;
     private Library library;
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
@@ -21,7 +20,7 @@ public class Console {
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private String menuOptions;
 
-    Console(Library library, ConsolePrinter consolePrinter, BufferedReader reader) throws IOException {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
@@ -31,7 +30,7 @@ public class Console {
     }
 
     void processUserInput() throws IOException {
-        String userInput = reader.readLine();
+        String userInput = reader.getNextLine();
 
         if (userInput.equals("1")) {
             consolePrinter.print(library.getBookInformation());
@@ -69,6 +68,6 @@ public class Console {
 
     private String getBookTitleFromUser(String function) throws IOException {
         consolePrinter.printLine("Enter book title to " + function + ":");
-        return reader.readLine();
+        return reader.getNextLine();
     }
 }

@@ -8,7 +8,6 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import static org.mockito.Mockito.*;
@@ -24,9 +23,9 @@ public class ConsoleTests {
     @Mock
     Library mockLibrary;
     @Mock
-    ConsolePrinter consolePrinter;
+    ConsolePrinter mockConsolePrinter;
     @Mock
-    BufferedReader reader;
+    ConsoleReader mockConsoleReader;
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -35,58 +34,58 @@ public class ConsoleTests {
     public void SetUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         when(mockLibrary.getBookInformation()).thenReturn(BOOKINFO);
-        console = new Console(mockLibrary, consolePrinter, reader);
-        orderVerifier = inOrder(consolePrinter, mockLibrary);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary);
     }
 
     @Test
     public void InitialisingConsoleShouldPrintWelcomeMessage() {
-        verify(consolePrinter).printLine(WELCOME_MESSAGE);
+        verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
     }
 
     @Test
     public void InitialisingConsoleShouldPrintMenuOptions() {
 
-        verify(consolePrinter).print(MENU);
+        verify(mockConsolePrinter).print(MENU);
     }
 
     @Test
     public void InitialisingConsolePrintsOptionsInCorrectOrder() {
-        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verifyNoMoreInteractions();
     }
 
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
-        when(reader.readLine()).thenReturn("1");
+        when(mockConsoleReader.getNextLine()).thenReturn("1");
         console.processUserInput();
-        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockLibrary).getBookInformation();
-        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelected() throws IOException {
-        when(reader.readLine()).thenReturn("a");
+        when(mockConsoleReader.getNextLine()).thenReturn("a");
         console.processUserInput();
-        when(reader.readLine()).thenReturn("12");
+        when(mockConsoleReader.getNextLine()).thenReturn("12");
         console.processUserInput();
-        when(reader.readLine()).thenReturn("£");
+        when(mockConsoleReader.getNextLine()).thenReturn("£");
         console.processUserInput();
-        when(reader.readLine()).thenReturn(" ");
+        when(mockConsoleReader.getNextLine()).thenReturn(" ");
         console.processUserInput();
 
-        orderVerifier.verify(consolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(consolePrinter).print(MENU);
-        orderVerifier.verify(consolePrinter, times(4)).printLine("Please select a valid option!");
+        orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter, times(4)).printLine("Please select a valid option!");
 
     }
 
     @Test
     public void UserInputQWillQuitApplication() throws IOException {
-        when(reader.readLine()).thenReturn("Q");
+        when(mockConsoleReader.getNextLine()).thenReturn("Q");
         exit.expectSystemExitWithStatus(0);
         console.processUserInput();
     }
@@ -95,27 +94,27 @@ public class ConsoleTests {
     public void UserCanCheckOutBook() throws IOException {
         String bookName = "Dark Places";
         String messageToUser = "message";
-        InOrder orderVerifier = inOrder(consolePrinter, mockLibrary);
+        InOrder orderVerifier = inOrder(mockConsolePrinter, mockLibrary);
 
-        when(reader.readLine()).thenReturn("2", bookName);
+        when(mockConsoleReader.getNextLine()).thenReturn("2", bookName);
         when(mockLibrary.checkOut(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
         orderVerifier.verify(mockLibrary).checkOut(bookName);
-        orderVerifier.verify(consolePrinter).printLine(messageToUser);
-        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
     @Test public void UserCanReturnBook() throws IOException {
         String bookName = "Dark Places";
         String messageToUser = "message";
-        when(reader.readLine()).thenReturn("3", bookName);
+        when(mockConsoleReader.getNextLine()).thenReturn("3", bookName);
         when(mockLibrary.returnBook(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
         orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
-        orderVerifier.verify(consolePrinter).printLine(messageToUser);
-        orderVerifier.verify(consolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
     // Movie Tests
@@ -123,7 +122,7 @@ public class ConsoleTests {
 //    @Test
 //    public void UserCanViewListOfMovies() throws IOException {
 //        String movieInfo = "Here's some movie info";
-//        when(reader.readLine()).thenReturn("4");
+//        when(reader.getNextLine()).thenReturn("4");
 //        when(mockLibrary.getMovieInformation()).thenReturn(movieInfo);
 //        console.processUserInput();
 //        orderVerifier.verify(mockLibrary, times(1)).getMovieInformation();

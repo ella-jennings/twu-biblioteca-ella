@@ -1,9 +1,8 @@
 package com.twu.biblioteca;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class BibliotecaApp {
 
@@ -13,8 +12,9 @@ public class BibliotecaApp {
         Book book3 = new Book("Factfulness", "Hans", "Rosling", 2018);
 
         Library library = new Library(Arrays.asList(book1, book2, book3));
+        Scanner scanner = new Scanner(System.in);
         ConsolePrinter consolePrinter = new ConsolePrinter();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ConsoleReader reader = new ConsoleReader(scanner);
         new Console(library, consolePrinter, reader).processUserInput();
     }
 

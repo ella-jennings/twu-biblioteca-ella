@@ -10,12 +10,12 @@ import java.io.PrintStream;
 
 public class ConsolePrinterTests {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private ConsolePrinter consolePrinter;
 
     @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
+    public void setUp() {
+        consolePrinter = new ConsolePrinter(new PrintStream(outContent));
     }
-    ConsolePrinter consolePrinter = new ConsolePrinter();
 
     @After
     public void restoreStreams() {

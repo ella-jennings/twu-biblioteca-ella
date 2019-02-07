@@ -13,7 +13,7 @@ public class BibliotecaApp {
 
         Library library = new Library(Arrays.asList(book1, book2, book3));
         Scanner scanner = new Scanner(System.in);
-        ConsolePrinter consolePrinter = new ConsolePrinter();
+        ConsolePrinter consolePrinter = new ConsolePrinter(System.out);
         ConsoleReader reader = new ConsoleReader(scanner);
         ConsoleTerminator consoleTerminator = new ConsoleTerminator();
         new Console(library, consolePrinter, reader, consoleTerminator).processUserInput();

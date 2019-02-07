@@ -1,11 +1,19 @@
 package com.twu.biblioteca;
 
+import java.io.PrintStream;
+
 public class ConsolePrinter {
+    private PrintStream out;
+
+    public ConsolePrinter(PrintStream out) {
+        this.out = out;
+    }
+
     void printLine(String string) {
-        System.out.println(string);
+        out.println(string);
     }
 
     void print(String string) {
-        System.out.print(string);
+        out.print(string);
     }
 }

@@ -18,15 +18,18 @@ public class Console {
         }
     };
     private static final String ERROR_MESSAGE = "Please select a valid option!";
+    private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private String menuOptions;
+
 
     Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader) throws IOException {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
-        this.consolePrinter.printLine("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
         getMenuOptions();
+        this.consolePrinter.printLine(WELCOME_MESSAGE);
         this.consolePrinter.print(menuOptions);
+        processUserInput();
     }
 
     void processUserInput() throws IOException {

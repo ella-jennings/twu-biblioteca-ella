@@ -13,7 +13,7 @@ public class BookTests {
     private final int YEAR = 2011;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         testBook = new String[]{"Dark Places", "Gillian", "Flynn"};
     }
 

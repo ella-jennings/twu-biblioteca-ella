@@ -23,7 +23,7 @@ public class Console {
     private String menuOptions;
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator) throws IOException {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator) {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.reader = reader;
@@ -76,7 +76,7 @@ public class Console {
         processUserInput();
     }
 
-    private String getBookTitleFromUser(String function) throws IOException {
+    private String getBookTitleFromUser(String function) {
         consolePrinter.printLine("Enter book title to " + function + ":");
         return reader.getNextLine();
     }

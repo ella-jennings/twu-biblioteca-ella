@@ -55,6 +55,7 @@ public class Console {
         }
         else {
             consolePrinter.printLine(ERROR_MESSAGE);
+            processUserInput();
         }
     }
 

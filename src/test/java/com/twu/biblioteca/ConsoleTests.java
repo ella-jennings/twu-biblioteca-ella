@@ -67,14 +67,8 @@ public class ConsoleTests {
     }
 
     @Test
-    public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelected() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("a");
-        console.processUserInput();
-        when(mockConsoleReader.getNextLine()).thenReturn("12");
-        console.processUserInput();
-        when(mockConsoleReader.getNextLine()).thenReturn("£");
-        console.processUserInput();
-        when(mockConsoleReader.getNextLine()).thenReturn(" ");
+    public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelectedUntilValidSelected() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("a", "12", "£", "", "1");
         console.processUserInput();
 
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);

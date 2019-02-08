@@ -9,6 +9,19 @@ public class Console {
     private ConsoleReader reader;
     private ConsoleTerminator consoleTerminator;
     private Library library;
+    private enum menu {
+        BOOKS("1"), CHECKOUT_BOOK("2"), RETURN_BOOK("3"), QUIT("Q");
+
+        public String getCode() {
+            return code;
+        }
+
+        private String code;
+
+        menu(String input) {
+            code = input;
+        }
+    }
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
             put("1", "List Of Books");
@@ -36,25 +49,21 @@ public class Console {
     void processUserInput() throws IOException {
         String userInput = reader.getNextLine();
 
-        if (userInput.equals("1")) {
+        if (userInput.equals(menu.BOOKS.getCode())) {
             consolePrinter.print(library.getBookInformation());
             returnToMenu();
         }
-        else if (userInput.equals("2")){
+        else if (userInput.equals(menu.CHECKOUT_BOOK.getCode())){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
             returnToMenu();
         }
-        else if (userInput.equals("3")){
+        else if (userInput.equals(menu.RETURN_BOOK.getCode())){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
             returnToMenu();
         }
-//        if (userInput.equals("4")){
-//            consolePrinter.print(library.getMovieInformation());
-//            consolePrinter.print(menuOptions);
-//        }
-        else if(userInput.equals("Q")) {
+        else if(userInput.equals(menu.QUIT.getCode())) {
             consoleTerminator.exitApplication();
         }
         else {

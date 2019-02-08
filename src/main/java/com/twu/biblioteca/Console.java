@@ -1,5 +1,8 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.Interfaces.IMenuOption;
+import com.twu.biblioteca.Interfaces.ListBooks;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,19 +12,19 @@ public class Console {
     private ConsoleReader reader;
     private ConsoleTerminator consoleTerminator;
     private Library library;
-    private enum menu {
-        BOOKS("1"), CHECKOUT_BOOK("2"), RETURN_BOOK("3"), QUIT("Q");
-
-        public String getCode() {
-            return code;
-        }
-
-        private String code;
-
-        menu(String input) {
-            code = input;
-        }
-    }
+//    private enum menu {
+//        BOOKS("1"), CHECKOUT_BOOK("2"), RETURN_BOOK("3"), QUIT("Q");
+//
+//        public String getCode() {
+//            return code;
+//        }
+//
+//        private String code;
+//
+//        menu(String input) {
+//            code = input;
+//        }
+//    }
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
             put("1", "List Of Books");
@@ -31,6 +34,7 @@ public class Console {
             put("Q", "Quit");
         }
     };
+    private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private String menuOptions;
@@ -42,28 +46,36 @@ public class Console {
         this.reader = reader;
         this.consoleTerminator = consoleTerminator;
         getMenuOptions();
+        menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
+            {put("1", new ListBooks(library));
+            }
+        };
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         this.consolePrinter.print(menuOptions);
     }
 
     void processUserInput() throws IOException {
         String userInput = reader.getNextLine();
-
-        if (userInput.equals(menu.BOOKS.getCode())) {
-            consolePrinter.print(library.getBookInformation());
-            returnToMenu();
+        if(userInput.equals("1")){
+            for(Map.Entry<String, IMenuOption> option: menuOptionMap.entrySet()){
+                if(userInput.equals(option.getKey())){
+                    String stringToPrint = option.getValue().executeOption();
+                    consolePrinter.printLine(stringToPrint);
+                    returnToMenu();
+                }
+            }
         }
-        else if (userInput.equals(menu.CHECKOUT_BOOK.getCode())){
+        else if (userInput.equals("2")){
             String userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
             returnToMenu();
         }
-        else if (userInput.equals(menu.RETURN_BOOK.getCode())){
+        else if (userInput.equals("3")){
             String userResponse = getBookTitleFromUser("return");
             consolePrinter.printLine(library.returnBook(userResponse));
             returnToMenu();
         }
-        else if(userInput.equals(menu.QUIT.getCode())) {
+        else if(userInput.equals("Q")) {
             consoleTerminator.exitApplication();
         }
         else {

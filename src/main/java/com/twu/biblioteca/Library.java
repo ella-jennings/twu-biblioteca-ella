@@ -2,7 +2,7 @@ package com.twu.biblioteca;
 
 import java.util.List;
 
-class Library {
+public class Library {
 
     private final List<Book> listOfBooks;
 //    private final List<Movie> listOfMovies;
@@ -12,7 +12,7 @@ class Library {
     }
 
 
-    String getBookInformation() {
+    public String getBookInformation() {
         StringBuilder bookInformation = new StringBuilder();
         for(Book book: listOfBooks) {
             if(!book.isOnLoan()){

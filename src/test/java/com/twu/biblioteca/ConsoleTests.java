@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +17,7 @@ public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\nQ - Quit\n";
-    private static final String BOOKINFO = "here is some book information";
+    private static final String BOOK_INFO = "here is some book information";
     private static final String QUIT_APPLICATION = "Q";
     private InOrder orderVerifier;
 
@@ -35,9 +34,8 @@ public class ConsoleTests {
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     @Before
-    public void SetUp() throws IOException {
+    public void SetUp() {
         MockitoAnnotations.initMocks(this);
-        when(mockLibrary.getBookInformation()).thenReturn(BOOKINFO);
         console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator);
         orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader);
     }
@@ -53,13 +51,16 @@ public class ConsoleTests {
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("1", QUIT_APPLICATION);
+        when(mockLibrary.getBookInformation()).thenReturn(BOOK_INFO);
+
         console.processUserInput();
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockLibrary).getBookInformation();
+        orderVerifier.verify(mockConsolePrinter).printLine(BOOK_INFO);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
     @Test

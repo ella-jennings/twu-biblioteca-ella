@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -21,9 +20,9 @@ public class BookTests {
     public void CheckoutBookSetsOnLoanAsTrue_ReturnSetsOnLoanAsFalse(){
         Book book = new Book(testBook[0], testBook[1], testBook[2], YEAR);
         assertEquals(false, book.isOnLoan());
-        book.checkOut();
+        book.checkOutItem();
         assertEquals(true, book.isOnLoan());
-        book.returnBook();
+        book.returnItem();
         assertEquals(false, book.isOnLoan());
     }
 }

@@ -25,6 +25,7 @@ public class Console {
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private String menuOptions;
+    private String userResponse;
 
 
     Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator) {
@@ -53,7 +54,7 @@ public class Console {
             }
         }
         else if (userInput.equals("2")){
-            String userResponse = getBookTitleFromUser("check out");
+            userResponse = getBookTitleFromUser("check out");
             consolePrinter.printLine(library.checkOut(userResponse));
             returnToMenu();
         }

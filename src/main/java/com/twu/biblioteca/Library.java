@@ -56,7 +56,7 @@ public class Library {
     String checkOut(String bookName) {
         for(Book book: listOfBooks){
             if(book.getTitle().equals(bookName) && !book.isOnLoan()){
-                book.checkOut();
+                book.checkOutItem();
                 return "Thank you! Enjoy the book";
             }
         }
@@ -66,7 +66,7 @@ public class Library {
     String returnBook(String bookName){
         for(Book book: listOfBooks){
             if(book.getTitle().equals(bookName) && book.isOnLoan()){
-                book.returnBook();
+                book.returnItem();
                 return "Thank you for returning the book";
             }
         }

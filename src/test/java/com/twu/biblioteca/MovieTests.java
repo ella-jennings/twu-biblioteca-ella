@@ -4,7 +4,10 @@ import com.twu.biblioteca.LibraryItems.Movie;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class MovieTests {
+
     @Test
     public void MovieWithRatingReturnsRatingOutOf10(){
         Movie movie = new Movie("title", 2011, "director", 5);
@@ -15,6 +18,16 @@ public class MovieTests {
     public void MovieWithNoRatingReturnsUnrated(){
         Movie movie = new Movie("title", 2011, "director");
         Assert.assertEquals("Unrated", movie.getRating());
+    }
+
+    @Test
+    public void CheckoutBookSetsOnLoanAsTrue_ReturnSetsOnLoanAsFalse(){
+        Movie movie = new Movie("title", 2011, "director", 6);
+        assertEquals(false, movie.isOnLoan());
+        movie.checkOutItem();
+        assertEquals(true, movie.isOnLoan());
+        movie.returnItem();
+        assertEquals(false, movie.isOnLoan());
     }
 
 }

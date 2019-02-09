@@ -1,6 +1,8 @@
 package com.twu.biblioteca.LibraryItems;
 
-public class Movie implements ILibraryItem {
+import com.twu.biblioteca.ItemLoan;
+
+public class Movie extends ItemLoan implements ILibraryItem {
 
     private final String title;
     private final Integer year;

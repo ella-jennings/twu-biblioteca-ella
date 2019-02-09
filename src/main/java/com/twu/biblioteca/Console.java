@@ -62,6 +62,10 @@ public class Console {
             consolePrinter.printLine(library.returnBook(userResponse));
             returnToMenu();
         }
+        else if (userInput.equals("4")){
+            consolePrinter.printLine(library.getMovieInformation());
+            returnToMenu();
+        }
         else if(userInput.equals("Q")) {
             consoleTerminator.exitApplication();
         }

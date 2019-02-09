@@ -115,15 +115,15 @@ public class ConsoleTests {
 
     // Movie Tests
 
-//    @Test
-//    public void UserCanViewListOfMovies() throws IOException {
-//        String movieInfo = "Here's some movie info";
-//        when(reader.getNextLine()).thenReturn("4");
-//        when(mockLibrary.getMovieInformation()).thenReturn(movieInfo);
-//        console.processUserInput();
-//        orderVerifier.verify(mockLibrary, times(1)).getMovieInformation();
-//        orderVerifier.verify(consolePrinter, times(1)).print(movieInfo);
-//        orderVerifier.verify(consolePrinter).print(MENU);
-//
-//    }
+    @Test
+    public void UserCanViewListOfMovies() throws IOException {
+        String movieInfo = "Here's some movie info";
+        when(mockConsoleReader.getNextLine()).thenReturn("4", "Q");
+        when(mockLibrary.getMovieInformation()).thenReturn(movieInfo);
+        console.processUserInput();
+        orderVerifier.verify(mockLibrary, times(1)).getMovieInformation();
+        orderVerifier.verify(mockConsolePrinter, times(1)).printLine(movieInfo);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+
+    }
 }

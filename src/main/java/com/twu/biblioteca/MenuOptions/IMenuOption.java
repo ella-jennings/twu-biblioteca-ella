@@ -1,4 +1,4 @@
-package com.twu.biblioteca.Interfaces;
+package com.twu.biblioteca.MenuOptions;
 
 public interface IMenuOption {
     String executeOption();

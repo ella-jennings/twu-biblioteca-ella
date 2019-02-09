@@ -1,6 +1,8 @@
 package com.twu.biblioteca;
 
-class Book {
+import com.twu.biblioteca.LibraryItems.ILibraryItem;
+
+class Book implements ILibraryItem {
     private String title;
     private String firstName;
     private String lastName;
@@ -26,12 +28,11 @@ class Book {
         return lastName;
     }
 
-    public Integer getPublishedDate() {
+    public Integer getDate() {
         return publishedDate;
     }
 
-
-    Boolean isOnLoan() {
+    public Boolean isOnLoan() {
         return onLoan;
     }
 

@@ -1,4 +1,4 @@
-package com.twu.biblioteca.Interfaces;
+package com.twu.biblioteca.MenuOptions;
 
 import com.twu.biblioteca.Library;
 

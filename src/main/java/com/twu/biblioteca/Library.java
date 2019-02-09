@@ -1,14 +1,17 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.LibraryItems.Movie;
+
 import java.util.List;
 
 public class Library {
 
     private final List<Book> listOfBooks;
-//    private final List<Movie> listOfMovies;
+    private final List<Movie> listOfMovies;
 
-    Library(List<Book> listOfBooks) {
+    Library(List<Book> listOfBooks, List<Movie> listOfMovies) {
         this.listOfBooks = listOfBooks;
+        this.listOfMovies = listOfMovies;
     }
 
 
@@ -16,15 +19,38 @@ public class Library {
         StringBuilder bookInformation = new StringBuilder();
         for(Book book: listOfBooks) {
             if(!book.isOnLoan()){
-                bookInformation.append(displayBookInformation(book));
+                String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
+                String[] items = {book.getTitle(), authorName, book.getDate().toString()};
+                bookInformation.append(buildLibraryItemInformation(items));
             }
         }
         return bookInformation.toString();
     }
 
-    private String displayBookInformation(Book book) {
+    public String getMovieInformation() {
+        StringBuilder movieInformation = new StringBuilder();
+        for(Movie movie: listOfMovies){
+            String[] items = {movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
+            movieInformation.append(buildLibraryItemInformation(items));
+        }
+        return movieInformation.toString();
+    }
+
+    private String buildLibraryItemInformation(String[] items) {
         String columnSeparator = " | ";
-        return book.getTitle() + columnSeparator + book.getLastName() + ", " + book.getFirstName().substring(0,1) + columnSeparator + book.getPublishedDate() + "\n";
+        int indexOfLastItem = items.length -1;
+        StringBuilder stringToReturn = new StringBuilder();
+        for(int i = 0; i < items.length; i++){
+            if(i == indexOfLastItem){
+                stringToReturn.append(items[i]);
+                stringToReturn.append("\n");
+            }
+            else{
+                stringToReturn.append(items[i]);
+                stringToReturn.append(columnSeparator);
+            }
+        }
+        return stringToReturn.toString();
     }
 
     String checkOut(String bookName) {
@@ -46,9 +72,5 @@ public class Library {
         }
         return "That is not a valid book to return.";
     }
-
-//    public String getMovieInformation() {
-//        return "";
-//    }
 }
 

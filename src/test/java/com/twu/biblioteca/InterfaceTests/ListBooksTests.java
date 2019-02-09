@@ -1,7 +1,7 @@
 package com.twu.biblioteca.InterfaceTests;
 
-import com.twu.biblioteca.Interfaces.IMenuOption;
-import com.twu.biblioteca.Interfaces.ListBooks;
+import com.twu.biblioteca.MenuOptions.IMenuOption;
+import com.twu.biblioteca.MenuOptions.ListBooks;
 import com.twu.biblioteca.Library;
 import org.junit.Before;
 import org.junit.Test;

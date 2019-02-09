@@ -1,7 +1,7 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.Interfaces.IMenuOption;
-import com.twu.biblioteca.Interfaces.ListBooks;
+import com.twu.biblioteca.MenuOptions.IMenuOption;
+import com.twu.biblioteca.MenuOptions.ListBooks;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -12,19 +12,6 @@ public class Console {
     private ConsoleReader reader;
     private ConsoleTerminator consoleTerminator;
     private Library library;
-//    private enum menu {
-//        BOOKS("1"), CHECKOUT_BOOK("2"), RETURN_BOOK("3"), QUIT("Q");
-//
-//        public String getCode() {
-//            return code;
-//        }
-//
-//        private String code;
-//
-//        menu(String input) {
-//            code = input;
-//        }
-//    }
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
             put("1", "List Of Books");

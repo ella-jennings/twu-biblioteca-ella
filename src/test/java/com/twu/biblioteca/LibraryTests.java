@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.LibraryItems.Movie;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,15 +10,19 @@ import static org.junit.Assert.assertEquals;
 
 public class LibraryTests {
     private String booksInformationAll = "Dark Places | Flynn, G | 2011\nTalent Is Overrated | Colvin, G | 2008\nFactfulness | Rosling, H | 2018\n";
+    private String movieInformationAll = "Die Hard | 1990 | Director | Unrated\nDie Hard 2 | 1992 | Director | 7/10\n";
     private Book book1 = new Book("Dark Places", "Gillian", "Flynn", 2011);
     private Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", 2008);
     private Book book3 = new Book("Factfulness", "Hans", "Rosling", 2018);
+    Movie movie1 = new Movie("Die Hard", 1990, "Director");
+    Movie movie2 = new Movie("Die Hard 2", 1992, "Director", 7);
+
     private final String INVALID_TITLE = "Talant Is over-raated";
     private Library library;
 
     @Before
     public void SetUp(){
-        library = new Library(Arrays.asList(book1, book2, book3));
+        library = new Library(Arrays.asList(book1, book2, book3), Arrays.asList(movie1, movie2));
     }
 
 
@@ -25,6 +30,13 @@ public class LibraryTests {
     public void DisplayBookInformationShouldReturnCorrectString() {
         String result = library.getBookInformation();
         String expectedString = booksInformationAll;
+        assertEquals(expectedString, result);
+    }
+
+    @Test
+    public void DisplayMovieInformationShouldReturnCorrectString() {
+        String result = library.getMovieInformation();
+        String expectedString = movieInformationAll;
         assertEquals(expectedString, result);
     }
 
@@ -38,7 +50,7 @@ public class LibraryTests {
     }
 
     @Test
-    public void InvalidBookNameShouldNotCHeckoutBookAndReturnFailure() {
+    public void InvalidBookNameShouldNotCheckoutBookAndReturnFailure() {
         String expectedFailureMessage = library.checkOut(INVALID_TITLE);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         String result = library.getBookInformation();

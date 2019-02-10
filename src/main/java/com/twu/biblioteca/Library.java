@@ -74,7 +74,7 @@ public class Library {
         }
     }
 
-    public String checkOutMovie(String movieIdentifier) {
+    String checkOutMovie(String movieIdentifier) {
         Movie item = locateItem(Movie.class, movieIdentifier, false);
         if(item == null){
             return "Sorry, that movie is not available";
@@ -93,6 +93,17 @@ public class Library {
         else {
             item.returnItem();
             return "Thank you for returning the book";
+        }
+    }
+
+     String returnMovie(String bookIdentifier){
+        Movie item = locateItem(Movie.class, bookIdentifier, true);
+        if(item == null){
+            return "That is not a valid movie to return.";
+        }
+        else {
+            item.returnItem();
+            return "Thank you for returning the movie";
         }
     }
 

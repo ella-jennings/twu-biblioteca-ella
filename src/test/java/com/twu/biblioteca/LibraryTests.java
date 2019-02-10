@@ -14,8 +14,8 @@ public class LibraryTests {
     private Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
     private Book book2 = new Book(2,"Talent Is Overrated", "Geoff", "Colvin", 2008);
     private Book book3 = new Book(3,"Factfulness", "Hans", "Rosling", 2018);
-    Movie movie1 = new Movie(4,"Die Hard", 1990, "Director");
-    Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
+    private Movie movie1 = new Movie(4,"Die Hard", 1990, "Director");
+    private Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
 
     private final String INVALID_TITLE = "Talant Is over-raated";
     private Library library;
@@ -159,6 +159,31 @@ public class LibraryTests {
         assertEquals(false, book2.isOnLoan());
         String expectedFailureMessage = library.returnBook(book2.getTitle());
         assertEquals("That is not a valid book to return.", expectedFailureMessage);
+    }
+
+    // movie
+
+    @Test
+    public void ReturnMovieShouldReturnBookAndReturnSuccess() {
+        library.checkOutMovie(movie2.getTitle());
+        String expectedSuccessMessage = library.returnMovie(movie2.getTitle());
+        assertEquals("Thank you for returning the movie", expectedSuccessMessage);
+        String expectedResult = movieInformationAll;
+        assertEquals(expectedResult, expectedResult);
+    }
+
+    @Test
+    public void InvalidMovieOrNotInTheLibraryCannotBeReturned(){
+        library.checkOutBook(movie2.getTitle());
+        String expectedFailureMessage = library.returnMovie(INVALID_TITLE);
+        assertEquals("That is not a valid movie to return.", expectedFailureMessage);
+    }
+
+    @Test
+    public void MovieNotOnLoanCannotBeReturned(){
+        assertEquals(false, movie2.isOnLoan());
+        String expectedFailureMessage = library.returnMovie(movie2.getTitle());
+        assertEquals("That is not a valid movie to return.", expectedFailureMessage);
     }
 
 }

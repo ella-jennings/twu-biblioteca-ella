@@ -15,7 +15,7 @@ public class BibliotecaApp {
         Movie movie1 = new Movie("Die Hard", 1990, "Director");
         Movie movie2 = new Movie("Die Hard 2", 1992, "Director", 7);
 
-        Library library = new Library(Arrays.asList(book1, book2, book3), Arrays.asList(movie1, movie2));
+        Library library = new Library(Arrays.asList(book1, book2, book3, movie1, movie2));
         Scanner scanner = new Scanner(System.in);
         ConsolePrinter consolePrinter = new ConsolePrinter(System.out);
         ConsoleReader reader = new ConsoleReader(scanner);

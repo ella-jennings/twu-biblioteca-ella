@@ -22,7 +22,7 @@ public class LibraryTests {
 
     @Before
     public void SetUp(){
-        library = new Library(Arrays.asList(book1, book2, book3), Arrays.asList(movie1, movie2));
+        library = new Library(Arrays.asList(book1, book2, book3, movie1,  movie2));
     }
 
 

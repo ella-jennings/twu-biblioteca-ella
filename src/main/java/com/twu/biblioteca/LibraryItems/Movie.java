@@ -27,6 +27,7 @@ public class Movie extends ItemLoan implements ILibraryItem {
         rating = "Unrated";
     }
 
+
     public String getTitle() {
         return title;
     }

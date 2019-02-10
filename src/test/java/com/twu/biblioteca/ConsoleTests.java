@@ -124,6 +124,14 @@ public class ConsoleTests {
         orderVerifier.verify(mockLibrary, times(1)).getMovieInformation();
         orderVerifier.verify(mockConsolePrinter, times(1)).printLine(movieInfo);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
-
     }
+
+//    @Test
+//    public void UserCanCheckOutMovie(){
+//        String movieName = "movie title";
+//        String messageToUser = "message";
+//
+//        when(mockConsoleReader.getNextLine()).thenReturn("4", movieName, QUIT_APPLICATION);
+//        when(mockLibrary.checkOutMovie(movieName));
+//    }
 }

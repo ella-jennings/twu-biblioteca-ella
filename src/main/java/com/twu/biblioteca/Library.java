@@ -4,6 +4,7 @@ import com.twu.biblioteca.LibraryItems.ILibraryItem;
 import com.twu.biblioteca.LibraryItems.Movie;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Library {
@@ -23,6 +24,28 @@ public class Library {
                 .collect(Collectors.toList());
     }
 
+    public String getBookInformation() {
+        StringBuilder bookInformation = new StringBuilder();
+
+        for(Book book: getCollectionOfType(Book.class)) {
+                String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
+                String[] items = {book.getId().toString(), book.getTitle(), authorName, book.getDate().toString()};
+                bookInformation.append(buildLibraryItemInformation(items));
+        }
+        return bookInformation.toString();
+    }
+
+
+    public String getMovieInformation() {
+        StringBuilder movieInformation = new StringBuilder();
+
+        for(Movie movie: getCollectionOfType(Movie.class)){
+            String[] items = {movie.getId().toString(), movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
+            movieInformation.append(buildLibraryItemInformation(items));
+        }
+        return movieInformation.toString();
+    }
+
     private String buildLibraryItemInformation(String[] items) {
         String columnSeparator = " | ";
         int indexOfLastItem = items.length -1;
@@ -40,36 +63,26 @@ public class Library {
         return stringToReturn.toString();
     }
 
-    public String getBookInformation() {
-        StringBuilder bookInformation = new StringBuilder();
-
-        for(Book book: getCollectionOfType(Book.class)) {
-                String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
-                String[] items = {book.getTitle(), authorName, book.getDate().toString()};
-                bookInformation.append(buildLibraryItemInformation(items));
+    String checkOutBook(String itemName) {
+        Book item = checkOutItem(Book.class, itemName);
+        if(item == null){
+            return "Sorry, that book is not available";
         }
-        return bookInformation.toString();
+        else {
+            item.checkOutItem();
+            return "Thank you! Enjoy the book";
+        }
     }
 
+    private <T extends ILibraryItem> T checkOutItem(Class<T> type, String input) {
+        Predicate<ILibraryItem> idMatch = x -> x.getId().toString().equals(input);
+        Predicate<ILibraryItem> titleMatch = x -> x.getTitle().equals(input);
 
-    public String getMovieInformation() {
-        StringBuilder movieInformation = new StringBuilder();
-
-        for(Movie movie: getCollectionOfType(Movie.class)){
-            String[] items = {movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
-            movieInformation.append(buildLibraryItemInformation(items));
-        }
-        return movieInformation.toString();
-    }
-
-    String checkOut(String itemName) {
-            for(ILibraryItem item: libraryItemList){
-                if(item.getTitle().equals(itemName) && !item.isOnLoan()){
-                    item.checkOutItem();
-                    return "Thank you! Enjoy the book";
-                }
-            }
-        return "Sorry, that book is not available";
+        return getCollectionOfType(type)
+                .stream()
+                .filter(idMatch.or(titleMatch))
+                .findFirst()
+                .orElse(null);
     }
 
     String returnBook(String bookName){

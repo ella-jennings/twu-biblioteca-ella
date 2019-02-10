@@ -87,10 +87,10 @@ public class ConsoleTests {
         String messageToUser = "message";
 
         when(mockConsoleReader.getNextLine()).thenReturn("2", bookName, QUIT_APPLICATION);
-        when(mockLibrary.checkOut(bookName)).thenReturn(messageToUser);
+        when(mockLibrary.checkOutBook(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
-        orderVerifier.verify(mockLibrary).checkOut(bookName);
+        orderVerifier.verify(mockLibrary).checkOutBook(bookName);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();

@@ -55,7 +55,7 @@ public class Console {
         }
         else if (userInput.equals("2")){
             userResponse = getBookTitleFromUser("check out");
-            consolePrinter.printLine(library.checkOut(userResponse));
+            consolePrinter.printLine(library.checkOutBook(userResponse));
             returnToMenu();
         }
         else if (userInput.equals("3")){

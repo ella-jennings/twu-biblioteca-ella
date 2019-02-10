@@ -8,8 +8,10 @@ public class Movie extends ItemLoan implements ILibraryItem {
     private final Integer year;
     private final String director;
     private final String rating;
+    private Integer id;
 
-    public Movie(String title, Integer year, String director, int rating) {
+    public Movie(Integer id, String title, Integer year, String director, int rating) {
+        this.id = id;
         this.title = title;
         this.year = year;
         this.director = director;
@@ -20,13 +22,19 @@ public class Movie extends ItemLoan implements ILibraryItem {
         return rating + "/10";
     }
 
-    public Movie(String title, Integer year, String Director) {
+    public Movie(Integer id, String title, Integer year, String Director) {
+        this.id = id;
         this.title = title;
         this.year = year;
         director = Director;
         rating = "Unrated";
     }
 
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;

@@ -9,11 +9,11 @@ import java.util.Scanner;
 public class BibliotecaApp {
 
     public static void main(String[] args) throws IOException {
-        Book book1 = new Book("Dark Places", "Gillian", "Flynn", 2011);
-        Book book2 = new Book("Talent Is Overrated", "Geoff", "Colvin", 2008);
-        Book book3 = new Book("Factfulness", "Hans", "Rosling", 2018);
-        Movie movie1 = new Movie("Die Hard", 1990, "Director");
-        Movie movie2 = new Movie("Die Hard 2", 1992, "Director", 7);
+        Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
+        Book book2 = new Book(2,"Talent Is Overrated", "Geoff", "Colvin", 2008);
+        Book book3 = new Book(3, "Factfulness", "Hans", "Rosling", 2018);
+        Movie movie1 = new Movie(4,"Die Hard", 1990, "Director");
+        Movie movie2 = new Movie(5,"Die Hard 2", 1992, "Director", 7);
 
         Library library = new Library(Arrays.asList(book1, book2, book3, movie1, movie2));
         Scanner scanner = new Scanner(System.in);

@@ -2,7 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.ILibraryItem;
 
-class Book extends ItemLoan implements ILibraryItem {
+public class Book extends ItemLoan implements ILibraryItem {
     private Integer id;
     private String title;
     private String firstName;
@@ -10,7 +10,7 @@ class Book extends ItemLoan implements ILibraryItem {
     private int publishedDate;
 
 
-    Book(Integer id, String title, String firstName, String lastName, Integer publishedDate) {
+    public Book(Integer id, String title, String firstName, String lastName, Integer publishedDate) {
         this.id = id;
         this.title = title;
         this.firstName = firstName;

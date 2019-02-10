@@ -1,8 +1,14 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.LibraryItems.ILibraryItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private String userId;
     private final String password;
+    private List<ILibraryItem> checkedOutItems = new ArrayList<>();
 
     public User(String userId, String password) {
         checkId(userId);
@@ -23,5 +29,13 @@ public class User {
 
     public String getUserId() {
         return userId;
+    }
+
+    public void addItem(ILibraryItem item) {
+        checkedOutItems.add(item);
+    }
+
+    public List<ILibraryItem> getCheckedOutItems(){
+        return checkedOutItems;
     }
 }

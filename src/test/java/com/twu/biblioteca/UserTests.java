@@ -1,5 +1,8 @@
-package com.twu.biblioteca.InterfaceTests;
+package com.twu.biblioteca;
 
+import com.twu.biblioteca.Book;
+import com.twu.biblioteca.LibraryItems.ILibraryItem;
+import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,6 +10,9 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(Theories.class)
 public class UserTests {
@@ -38,5 +44,16 @@ public class UserTests {
         User user = new User("1234-5678", "password");
         Boolean result = user.correctPassword("password123");
         Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void LibraryItemsCanBeAddedToUser(){
+        Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
+        Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
+        User user = new User("1234-5678", "password");
+        user.addItem(book1);
+        user.addItem(movie2);
+        List<ILibraryItem> expectedList = Arrays.asList(book1, movie2);
+        Assert.assertEquals( expectedList, user.getCheckedOutItems());
     }
 }

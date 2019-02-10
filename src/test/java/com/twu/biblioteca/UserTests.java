@@ -56,4 +56,16 @@ public class UserTests {
         List<ILibraryItem> expectedList = Arrays.asList(book1, movie2);
         Assert.assertEquals( expectedList, user.getCheckedOutItems());
     }
+
+    @Test
+    public void LibraryItemsCanBeRemovedFromUser(){
+        Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
+        Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
+        User user = new User("1234-5678", "password");
+        user.addItem(book1);
+        user.addItem(movie2);
+        user.removeItem(book1);
+        List<ILibraryItem> expectedList = Arrays.asList(movie2);
+        Assert.assertEquals( expectedList, user.getCheckedOutItems());
+    }
 }

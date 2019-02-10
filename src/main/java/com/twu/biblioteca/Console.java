@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.IMenuOption;
 import com.twu.biblioteca.MenuOptions.ListBooks;
 
@@ -18,9 +19,24 @@ public class Console {
             put("2", "Checkout a Book");
             put("3", "Return a Book");
             put("4", "List Of Movies");
+            put("5", "Checkout a Movie");
+            put("6", "Return a Movie");
             put("Q", "Quit");
         }
     };
+    private enum functions {
+        CHECK_OUT("check out"), RETURN("return");
+
+        private String textString;
+
+        functions(String textString) {
+            this.textString = textString;
+        }
+
+        public String getTextString() {
+            return textString;
+        }
+    }
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
@@ -54,17 +70,27 @@ public class Console {
             }
         }
         else if (userInput.equals("2")){
-            userResponse = getBookTitleFromUser("check out");
+            userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
             consolePrinter.printLine(library.checkOutBook(userResponse));
             returnToMenu();
         }
         else if (userInput.equals("3")){
-            String userResponse = getBookTitleFromUser("return");
+            String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
             consolePrinter.printLine(library.returnBook(userResponse));
             returnToMenu();
         }
         else if (userInput.equals("4")){
             consolePrinter.printLine(library.getMovieInformation());
+            returnToMenu();
+        }
+        else if (userInput.equals("5")){
+            String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
+            consolePrinter.printLine(library.checkOutMovie(userResponse));
+            returnToMenu();
+        }
+        else if (userInput.equals("6")){
+            String userResponse = getItemTitleFromUser(functions.RETURN, Movie.class);
+            consolePrinter.printLine(library.returnMovie(userResponse));
             returnToMenu();
         }
         else if(userInput.equals("Q")) {
@@ -89,8 +115,8 @@ public class Console {
         processUserInput();
     }
 
-    private String getBookTitleFromUser(String function) {
-        consolePrinter.printLine("Enter book title to " + function + ":");
+    private <T> String getItemTitleFromUser(functions function, Class<T> typeOfItem) {
+        consolePrinter.printLine("Enter " + typeOfItem.getSimpleName().toLowerCase() + " title or id to " + function.getTextString() + ":");
         return reader.getNextLine();
     }
 }

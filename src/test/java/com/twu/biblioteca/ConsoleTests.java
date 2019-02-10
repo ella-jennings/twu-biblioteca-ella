@@ -16,7 +16,11 @@ import static org.mockito.Mockito.*;
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\nQ - Quit\n";
+    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nQ - Quit\n";
+    private static final String USER_PROMPT_BOOK_CHECKOUT = "Enter book title or id to check out:";
+    private static final String USER_PROMPT_BOOK_RETURN = "Enter book title or id to return:";
+    private static final String USER_PROMPT_MOVIE_CHECKOUT = "Enter movie title or id to check out:";
+    private static final String USER_PROMPT_MOVIE_RETURN = "Enter movie title or id to return:";
     private static final String BOOK_INFO = "here is some book information";
     private static final String QUIT_APPLICATION = "Q";
     private InOrder orderVerifier;
@@ -90,6 +94,7 @@ public class ConsoleTests {
         when(mockLibrary.checkOutBook(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
+        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_CHECKOUT);
         orderVerifier.verify(mockLibrary).checkOutBook(bookName);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
@@ -105,6 +110,7 @@ public class ConsoleTests {
         when(mockLibrary.returnBook(bookName)).thenReturn(messageToUser);
         console.processUserInput();
 
+        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_RETURN);
         orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
@@ -118,20 +124,46 @@ public class ConsoleTests {
     @Test
     public void UserCanViewListOfMovies() throws IOException {
         String movieInfo = "Here's some movie info";
-        when(mockConsoleReader.getNextLine()).thenReturn("4", "Q");
+        when(mockConsoleReader.getNextLine()).thenReturn("4", QUIT_APPLICATION);
         when(mockLibrary.getMovieInformation()).thenReturn(movieInfo);
         console.processUserInput();
+
         orderVerifier.verify(mockLibrary, times(1)).getMovieInformation();
         orderVerifier.verify(mockConsolePrinter, times(1)).printLine(movieInfo);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
-//    @Test
-//    public void UserCanCheckOutMovie(){
-//        String movieName = "movie title";
-//        String messageToUser = "message";
-//
-//        when(mockConsoleReader.getNextLine()).thenReturn("4", movieName, QUIT_APPLICATION);
-//        when(mockLibrary.checkOutMovie(movieName));
-//    }
+    @Test
+    public void UserCanCheckOutMovie() throws IOException {
+        String movieName = "movie title";
+        String messageToUser = "message";
+
+        when(mockConsoleReader.getNextLine()).thenReturn("5", movieName, QUIT_APPLICATION);
+        when(mockLibrary.checkOutMovie(movieName)).thenReturn(messageToUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_MOVIE_CHECKOUT);
+        orderVerifier.verify(mockLibrary).checkOutMovie(movieName);
+        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verifyNoMoreInteractions();
+    }
+
+    @Test public void UserCanReturnMove() throws IOException {
+        String movieName = "movie title";
+        String messageToUser = "message";
+        when(mockConsoleReader.getNextLine()).thenReturn("6", movieName, QUIT_APPLICATION);
+        when(mockLibrary.returnMovie(movieName)).thenReturn(messageToUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_MOVIE_RETURN);
+        orderVerifier.verify(mockLibrary, times(1)).returnMovie(movieName);
+        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verifyNoMoreInteractions();
+    }
 }

@@ -88,6 +88,56 @@ public class LibraryTests {
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
     }
 
+    // Movie
+
+    @Test
+    public void CheckingOutMovieWithTitleShouldRemoveItFromBooksListAndReturnSuccess() {
+        String expectedSuccessMessage = library.checkOutMovie(movie1.getTitle());
+        assertEquals("Thank you! Enjoy the movie", expectedSuccessMessage);
+        String result = library.getMovieInformation();
+        String expectedResult = "5 | Die Hard 2 | 1992 | Director | 7/10\n";
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void CheckingOutMovieWithIdShouldRemoveItFromBooksListAndReturnSuccess() {
+        String expectedSuccessMessage = library.checkOutMovie(movie1.getId().toString());
+        assertEquals("Thank you! Enjoy the movie", expectedSuccessMessage);
+        String result = library.getMovieInformation();
+        String expectedResult = "5 | Die Hard 2 | 1992 | Director | 7/10\n";
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void InvalidMovieNameShouldNotCheckoutBookAndReturnFailure() {
+        String expectedFailureMessage = library.checkOutMovie(INVALID_TITLE);
+        assertEquals("Sorry, that movie is not available", expectedFailureMessage);
+        String result = library.getBookInformation();
+        String expectedResult = booksInformationAll;
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void InvalidMovieIdShouldNotCheckoutBookAndReturnFailure() {
+        String expectedFailureMessage = library.checkOutMovie("2");
+        assertEquals("Sorry, that movie is not available", expectedFailureMessage);
+        String result = library.getBookInformation();
+        String expectedResult = booksInformationAll;
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void ShouldNotCheckoutMovieWhenAlreadyLoanedAndReturnFailure() {
+        library.checkOutMovie(movie1.getTitle());
+        assertEquals(true, movie1.isOnLoan());
+        String expectedFailureMessage = library.checkOutMovie(movie1.getTitle());
+        assertEquals("Sorry, that movie is not available", expectedFailureMessage);
+    }
+
+
+    // Return Functionality
+
+    // Book
     @Test
     public void ReturnBookShouldReturnBookAndReturnSuccess() {
         library.checkOutBook(book2.getTitle());

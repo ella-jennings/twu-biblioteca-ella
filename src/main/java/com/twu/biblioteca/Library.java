@@ -63,14 +63,25 @@ public class Library {
         return stringToReturn.toString();
     }
 
-    String checkOutBook(String itemName) {
-        Book item = checkOutItem(Book.class, itemName);
+    String checkOutBook(String booIdentifier) {
+        Book item = checkOutItem(Book.class, booIdentifier);
         if(item == null){
             return "Sorry, that book is not available";
         }
         else {
             item.checkOutItem();
             return "Thank you! Enjoy the book";
+        }
+    }
+
+    public String checkOutMovie(String movieIdentifier) {
+        Movie item = checkOutItem(Movie.class, movieIdentifier);
+        if(item == null){
+            return "Sorry, that movie is not available";
+        }
+        else {
+            item.checkOutItem();
+            return "Thank you! Enjoy the movie";
         }
     }
 
@@ -93,10 +104,6 @@ public class Library {
             }
         }
         return "That is not a valid book to return.";
-    }
-
-    public String checkOutMovie(String movieName) {
-        return "";
     }
 }
 

@@ -42,6 +42,29 @@ public class UserValidatorTests {
     }
 
     @Test
+    public void LogInUserWillReturnUserDetails(){
+        when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID, CORRECT_PASSWORD);
+        User user = userValidator.logInUserIfNotAlready(null);
+        Assert.assertEquals(mockUser, user);
+    }
+
+    @Test
+    public void LogInWillReturnNullWith5IncorrectUserDetails() {
+        when(mockConsoleReader.getNextLine()).thenReturn("45-23", "45-1231243", "34534534", "q", "dgdf");
+        User user = userValidator.logInUserIfNotAlready(null);
+        verify(mockConsolePrinter).printLine("User attempts max reached");
+        Assert.assertEquals(null, user);
+    }
+
+    @Test
+    public void LogInWillReturnNullWithCorrectUserDetailsAnd5AttemptsIncorrectPasswordDetails() {
+        when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID,"45-23", "45-1231243", "34534534", "q", "dgdf");
+        User user = userValidator.logInUserIfNotAlready(null);
+        verify(mockConsolePrinter).printLine("Password attempts max reached");
+        Assert.assertEquals(null, user);
+    }
+
+    @Test
     public void CallingLogInUserAndProvidingCorrectDetailsWillReturnUserProfile() {
         when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID, CORRECT_PASSWORD);
         User user = userValidator.logInUser();

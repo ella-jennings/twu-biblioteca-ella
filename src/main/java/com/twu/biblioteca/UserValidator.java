@@ -12,15 +12,36 @@ public class UserValidator {
         this.library = library;
     }
 
+    public User logInUserIfNotAlready(User user) {
+        if(user == null) {
+            return logInUser();
+        } else{
+            return user;
+        }
+    }
+
     public User logInUser() {
         Boolean validUser = checkUserId();
-        while(!validUser){
+        int userAttempt = 0;
+        while(!validUser && userAttempt < 4){
+            userAttempt += 1;
             validUser = checkUserId();
         }
+        if( userAttempt == 4 ) {
+            consolePrinter.printLine("User attempts max reached");
+            return null;
+        }
+
         Boolean login = checkPassword(user);
-        while(!login){
+        int passwordAttempt = 0;
+        while(!login && passwordAttempt < 4){
             consolePrinter.printLine("Incorrect password");
+            passwordAttempt += 1;
             login = checkPassword(user);
+        }
+        if( passwordAttempt == 4 ) {
+            consolePrinter.printLine("Password attempts max reached");
+            return null;
         }
         return user;
     }

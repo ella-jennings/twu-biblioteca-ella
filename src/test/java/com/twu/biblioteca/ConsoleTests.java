@@ -16,16 +16,14 @@ import static org.mockito.Mockito.*;
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nL - Login\nQ - Quit\n";
-    private static final String LOGGED_IN_MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nD - View my details\nL - Log out\nQ - Quit\n";
+    private static final String MENU = "normal menu";
+    private static final String LOGGED_IN_MENU = "Logged in menu";
     private static final String USER_PROMPT_BOOK_CHECKOUT = "Enter book title or id to check out:";
     private static final String USER_PROMPT_BOOK_RETURN = "Enter book title or id to return:";
     private static final String USER_PROMPT_MOVIE_CHECKOUT = "Enter movie title or id to check out:";
     private static final String USER_PROMPT_MOVIE_RETURN = "Enter movie title or id to return:";
     private static final String BOOK_INFO = "here is some book information";
     private static final String QUIT_APPLICATION = "Q";
-    private static String password = "password";
-    private static String userId = "1234-5678";
 
     private InOrder orderVerifier;
 
@@ -41,6 +39,8 @@ public class ConsoleTests {
     User mockUser;
     @Mock
     UserValidator mockUserValidator;
+    @Mock
+    ConsoleHelper mockConsoleHelper;
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -48,14 +48,18 @@ public class ConsoleTests {
     @Before
     public void SetUp() {
         MockitoAnnotations.initMocks(this);
-        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockUserValidator);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockUserValidator);
+        when(mockConsoleHelper.getMenu(null)).thenReturn(MENU);
+        when(mockConsoleHelper.getMenu(mockUser)).thenReturn(LOGGED_IN_MENU);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator);
+
     }
 
 
     @Test
     public void InitialisingConsolePrintsOptionsInCorrectOrder() {
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
+        orderVerifier.verify(mockConsoleHelper).getMenu(null);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verifyNoMoreInteractions();
     }
@@ -110,7 +114,7 @@ public class ConsoleTests {
         String messageToUser = "message";
 
         when(mockConsoleReader.getNextLine()).thenReturn("2", bookName, "2", bookName, QUIT_APPLICATION);
-        when(mockLibrary.checkOutBook(eq(bookName), eq(mockUser))).thenReturn(messageToUser);
+        when(mockLibrary.checkOut(eq(Book.class), eq(bookName), eq(mockUser))).thenReturn(messageToUser);
         when(mockUserValidator.logInUser()).thenReturn(mockUser);
         console.processUserInput();
 
@@ -134,14 +138,14 @@ public class ConsoleTests {
         String messageToUser = "message";
 
         when(mockConsoleReader.getNextLine()).thenReturn("2", bookName, QUIT_APPLICATION);
-        when(mockLibrary.checkOutBook(eq(bookName), eq(mockUser))).thenReturn(messageToUser);
+        when(mockLibrary.checkOut(eq(Book.class), eq(bookName), eq(mockUser))).thenReturn(messageToUser);
         when(mockUserValidator.logInUser()).thenReturn(mockUser);
         console.processUserInput();
 
         orderVerifier.verify(mockUserValidator).logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_CHECKOUT);
         orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockLibrary).checkOutBook(bookName, mockUser);
+        orderVerifier.verify(mockLibrary).checkOut(Book.class, bookName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();

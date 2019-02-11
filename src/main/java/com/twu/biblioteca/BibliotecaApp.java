@@ -23,8 +23,9 @@ public class BibliotecaApp {
         ConsolePrinter consolePrinter = new ConsolePrinter(System.out);
         ConsoleReader consoleReader = new ConsoleReader(scanner);
         ConsoleTerminator consoleTerminator = new ConsoleTerminator();
+        ConsoleHelper consoleHelper = new ConsoleHelper();
         UserValidator userValidator = new UserValidator(consoleReader, consolePrinter, library);
-        new Console(library, consolePrinter, consoleReader, consoleTerminator, userValidator).processUserInput();
+        new Console(library, consolePrinter, consoleReader, consoleTerminator, consoleHelper, userValidator).processUserInput();
     }
 
 }

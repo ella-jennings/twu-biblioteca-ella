@@ -12,6 +12,7 @@ public class Console {
     private final ConsolePrinter consolePrinter;
     private ConsoleReader consoleReader;
     private ConsoleTerminator consoleTerminator;
+    private ConsoleHelper consoleHelper;
     private UserValidator userValidator;
     private Library library;
     private enum functions {
@@ -30,23 +31,23 @@ public class Console {
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private String menuOptions;
     private User loggedInUser = null;
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, UserValidator userValidator) {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator) {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.consoleReader = reader;
         this.consoleTerminator = consoleTerminator;
+        this.consoleHelper = consoleHelper;
         this.userValidator = userValidator;
-        getMenuOptions();
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
             {put("1", new ListBooks(library));
             }
         };
         this.consolePrinter.printLine(WELCOME_MESSAGE);
-        this.consolePrinter.print(menuOptions);
+        String menu = consoleHelper.getMenu(loggedInUser);
+        this.consolePrinter.print(menu);
     }
 
     void processUserInput() throws IOException {
@@ -63,7 +64,7 @@ public class Console {
         else if (userInput.equals("2")){
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
-            consolePrinter.printLine(library.checkOutBook(userResponse, loggedInUser));
+            consolePrinter.printLine(library.checkOut(Book.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("3")){
@@ -124,32 +125,8 @@ public class Console {
         }
     }
 
-    private void getMenuOptions() {
-        Map<String, String> menuOptions = new LinkedHashMap<>();
-        menuOptions.put("1", "List Of Books");
-        menuOptions.put("2", "Checkout a Book");
-        menuOptions.put("3", "Return a Book");
-        menuOptions.put("4", "List Of Movies");
-        menuOptions.put("5", "Checkout a Movie");
-        menuOptions.put("6", "Return a Movie");
-        if(loggedInUser != null){
-            menuOptions.put("D", "View my details");
-            menuOptions.put("L", "Log out");
-        } else {
-            menuOptions.put("L", "Login");
-        }
-        menuOptions.put("Q", "Quit");
-
-        StringBuilder options = new StringBuilder();
-        for(Map.Entry<String, String> entry: menuOptions.entrySet()){
-            options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
-        }
-        this.menuOptions = options.toString();
-    }
-
     private void returnToMenu() throws IOException {
-        getMenuOptions();
-        consolePrinter.print(menuOptions);
+        consolePrinter.print(consoleHelper.getMenu(loggedInUser));
         processUserInput();
     }
 

@@ -13,7 +13,10 @@ public class UserValidator {
     }
 
     public User logInUser() {
-        checkUserId();
+        Boolean validUser = checkUserId();
+        while(!validUser){
+            validUser = checkUserId();
+        }
         Boolean login = checkPassword(user);
         while(!login){
             consolePrinter.printLine("Incorrect password");
@@ -28,13 +31,13 @@ public class UserValidator {
         return user.isCorrectPassword(passwordAttempt);
     }
 
-    private void checkUserId() {
+    private Boolean checkUserId() {
         consolePrinter.printLine("Please enter User Id: ");
         String userId = consoleReader.getNextLine();
-//        if(!userId.matches("^([0-9]){4}-([0-9]){4}$")){
-//            consolePrinter.printLine("User Id must be in format XXXX-XXXX where X is a number");
-//            checkUserId();
-//        }
+        if(!userId.matches("^([0-9]){4}-([0-9]){4}$")){
+            consolePrinter.printLine("User Id must be in format XXXX-XXXX where X is a number");
+            return false;
+        }
         try {
             user = library.getUsers()
                     .stream()
@@ -42,8 +45,9 @@ public class UserValidator {
                     .findFirst()
                     .get();
         } catch (Exception ex) {
-            consolePrinter.printLine("User not found! User Id must be in format XXXX-XXXX where X is a number");
-            checkUserId();
+            consolePrinter.printLine("User not found!");
+            return false;
         }
+        return true;
     }
 }

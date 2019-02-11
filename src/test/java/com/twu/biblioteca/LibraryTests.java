@@ -130,7 +130,7 @@ public class LibraryTests {
     @Test
     public void CheckingOutBookWithTitleShouldRemoveItFromBooksListAndReturnSuccess() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOutBook(book2.getTitle(), user3);
+        String expectedSuccessMessage = library.checkOut(Book.class, book2.getTitle(), user3);
         assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
 
         verify(user3, times(1)).addItem(book2);
@@ -139,7 +139,7 @@ public class LibraryTests {
     @Test
     public void CheckingOutBookWithIdShouldRemoveItFromBooksListAndReturnSuccess() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOutBook(book2.getId().toString(), user3);
+        String expectedSuccessMessage = library.checkOut(Book.class, book2.getId().toString(), user3);
         assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
         verify(user3, times(1)).addItem(book2);
     }
@@ -147,7 +147,7 @@ public class LibraryTests {
     @Test
     public void InvalidBookNameShouldNotCheckoutBookAndReturnFailure() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.checkOutBook(INVALID_TITLE, user3);
+        String expectedFailureMessage = library.checkOut(Book.class, INVALID_TITLE, user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book2);
     }
@@ -155,7 +155,7 @@ public class LibraryTests {
     @Test
     public void InvalidBookIdShouldNotCheckoutBookAndReturnFailure() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.checkOutBook("5", user3);
+        String expectedFailureMessage = library.checkOut(Book.class,"5", user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book2);
     }
@@ -163,7 +163,7 @@ public class LibraryTests {
     @Test
     public void ShouldNotCheckoutBookWhenAlreadyLoanedAndReturnFailure() {
         when(book1.isOnLoan()).thenReturn(true);
-        String expectedFailureMessage = library.checkOutBook(book1.getTitle(), user3);
+        String expectedFailureMessage = library.checkOut(Book.class,book1.getTitle(), user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book1);
     }

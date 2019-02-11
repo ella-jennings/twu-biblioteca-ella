@@ -44,7 +44,8 @@ public class UserValidatorTests {
     @Test
     public void CallingLogInUserAndProvidingCorrectDetailsWillReturnUserProfile() {
         when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID, CORRECT_PASSWORD);
-        Assert.assertEquals(mockUser, userValidator.logInUser());
+        User user = userValidator.logInUser();
+        Assert.assertEquals(mockUser, user);
     }
 
     @Test
@@ -53,12 +54,11 @@ public class UserValidatorTests {
         User result = userValidator.logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockLibrary).getUsers();
-        orderVerifier.verify(mockConsolePrinter).printLine("User not found! User Id must be in format XXXX-XXXX where X is a number");
+        orderVerifier.verify(mockConsolePrinter).printLine("User Id must be in format XXXX-XXXX where X is a number");
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockLibrary).getUsers();
-        orderVerifier.verify(mockConsolePrinter).printLine("User not found! User Id must be in format XXXX-XXXX where X is a number");
+        orderVerifier.verify(mockConsolePrinter).printLine("User not found!");
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockLibrary).getUsers();

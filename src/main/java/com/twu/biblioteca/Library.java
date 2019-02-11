@@ -39,15 +39,16 @@ public class Library {
         return movieInformation.toString();
     }
 
-    String checkOutBook(String bookIdentifier, User user) {
-        Book item = locateItem(Book.class, bookIdentifier, false, libraryItemList);
+    <T extends ILibraryItem> String checkOut(Class<T> type, String identifier, User user) {
+        ILibraryItem item = locateItem(type, identifier, false, libraryItemList);
+        String typeName = type.getSimpleName().toLowerCase();
         if(item == null){
-            return "Sorry, that book is not available";
+            return "Sorry, that " + typeName + " is not available";
         }
         else {
             item.checkOutItem();
             user.addItem(item);
-            return "Thank you! Enjoy the book";
+            return "Thank you! Enjoy the " + typeName;
         }
     }
 

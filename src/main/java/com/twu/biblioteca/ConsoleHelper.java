@@ -5,6 +5,14 @@ import java.util.Map;
 
 public class ConsoleHelper {
 
+    private ConsolePrinter consolePrinter;
+    private ConsoleReader consoleReader;
+
+    public ConsoleHelper(ConsolePrinter consolePrinter, ConsoleReader consoleReader) {
+        this.consolePrinter = consolePrinter;
+        this.consoleReader = consoleReader;
+    }
+
     public String getMenu(User user) {
         Map<String, String> menuOptions = new LinkedHashMap<>();
         menuOptions.put("1", "List Of Books");
@@ -26,5 +34,10 @@ public class ConsoleHelper {
             options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
         }
          return options.toString();
+    }
+
+    public <T> String getItemTitleFromUser(String function, Class<T> typeOfItem) {
+        consolePrinter.printLine("Enter " + typeOfItem.getSimpleName().toLowerCase() + " title or id to " + function + ":");
+        return consoleReader.getNextLine();
     }
 }

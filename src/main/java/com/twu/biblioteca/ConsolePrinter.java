@@ -9,7 +9,7 @@ public class ConsolePrinter {
         this.out = out;
     }
 
-    void printLine(String string) {
+    public void printLine(String string) {
         out.println(string);
     }
 

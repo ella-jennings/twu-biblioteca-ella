@@ -1,6 +1,8 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
+import com.twu.biblioteca.MenuOptions.CheckOutItem;
+import com.twu.biblioteca.MenuOptions.ICheckOutMenuOption;
 import com.twu.biblioteca.MenuOptions.IMenuOption;
 import com.twu.biblioteca.MenuOptions.ListItems;
 
@@ -29,6 +31,7 @@ public class Console {
         }
     }
     private Map<String, IMenuOption> menuOptionMap;
+    private Map<String, ICheckOutMenuOption> checkInMenuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private User loggedInUser = null;
@@ -41,56 +44,66 @@ public class Console {
         this.consoleTerminator = consoleTerminator;
         this.consoleHelper = consoleHelper;
         this.userValidator = userValidator;
-        menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
-            {
-                put("1", new ListItems(library, Book.class));
-                put("4", new ListItems(library, Movie.class));
-            }
-        };
+        setUpOptions(library, consolePrinter, consoleHelper);
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         String menu = consoleHelper.getMenu(loggedInUser);
         this.consolePrinter.print(menu);
     }
 
+    private void setUpOptions(Library library, ConsolePrinter consolePrinter, ConsoleHelper consoleHelper) {
+        menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
+            {
+                put("1", new ListItems(library, consolePrinter, Book.class));
+                put("4", new ListItems(library, consolePrinter, Movie.class));
+            }
+        };
+        checkInMenuOptionMap = new LinkedHashMap<String, ICheckOutMenuOption>(){
+            {
+                put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper));
+            }
+        };
+    }
+
     void processUserInput() throws IOException {
         String userInput = consoleReader.getNextLine();
-        if(userInput.equals("1")|| userInput.equals("4")){
-            for(Map.Entry<String, IMenuOption> option: menuOptionMap.entrySet()){
-                if(userInput.equals(option.getKey())){
-                    String stringToPrint = option.getValue().executeOption();
-                    consolePrinter.printLine(stringToPrint);
-                    returnToMenu();
-                }
+        if(menuOptionMap.containsKey(userInput)){
+            menuOptionMap.get(userInput).executeOption();
+            returnToMenu();
+            }
+        else if (checkInMenuOptionMap.containsKey(userInput)){
+            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+            if(loggedInUser == null){
+                returnToMenu();
+            } else {
+                checkInMenuOptionMap.get(userInput).executeOption(loggedInUser);
+                returnToMenu();
             }
         }
-        else if (userInput.equals("2")){
-            tryLogIn();
-            String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
-            consolePrinter.printLine(library.checkOutItem(Book.class, userResponse, loggedInUser));
-            returnToMenu();
-        }
         else if (userInput.equals("3")){
-            tryLogIn();
+            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+
             String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
             consolePrinter.printLine(library.returnItem(Book.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("5")){
-            tryLogIn();
+            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
             consolePrinter.printLine(library.checkOutItem(Movie.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("6")){
-            tryLogIn();
+            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+
             String userResponse = getItemTitleFromUser(functions.RETURN, Movie.class);
             consolePrinter.printLine(library.returnItem(Movie.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if(userInput.equals("L")) {
             if(loggedInUser == null){
-            tryLogIn();
-            returnToMenu();
+                loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+                returnToMenu();
             } else {
                 loggedInUser = null;
                 returnToMenu();
@@ -117,11 +130,6 @@ public class Console {
         processUserInput();
     }
 
-    private void tryLogIn() {
-        if(loggedInUser == null) {
-            loggedInUser = userValidator.logInUser();
-        }
-    }
 
     private void returnToMenu() throws IOException {
         consolePrinter.print(consoleHelper.getMenu(loggedInUser));

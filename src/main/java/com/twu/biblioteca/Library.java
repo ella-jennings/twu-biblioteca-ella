@@ -29,7 +29,7 @@ public class Library {
         return information.toString();
     }
 
-    <T extends ILibraryItem> String checkOutItem(Class<T> type, String identifier, User user) {
+    public <T extends ILibraryItem> String checkOutItem(Class<T> type, String identifier, User user) {
         ILibraryItem item = locateItem(type, identifier, false, libraryItemList);
         String typeName = getTypeName(type);
         if(item == null){

@@ -14,17 +14,6 @@ public class Console {
     private ConsoleTerminator consoleTerminator;
     private UserValidator userValidator;
     private Library library;
-    private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
-        {
-            put("1", "List Of Books");
-            put("2", "Checkout a Book");
-            put("3", "Return a Book");
-            put("4", "List Of Movies");
-            put("5", "Checkout a Movie");
-            put("6", "Return a Movie");
-            put("Q", "Quit");
-        }
-    };
     private enum functions {
         CHECK_OUT("check out"), RETURN("return");
 
@@ -99,13 +88,34 @@ public class Console {
             consolePrinter.printLine(library.returnMovie(userResponse, loggedInUser));
             returnToMenu();
         }
+        else if(userInput.equals("L")) {
+            if(loggedInUser == null){
+            tryLogIn();
+            returnToMenu();
+            } else {
+                loggedInUser = null;
+                returnToMenu();
+            }
+        }
+        else if(userInput.equals("D")){
+            if(loggedInUser == null){
+                getErrorMessageAndCheckInput();
+            } else {
+                consolePrinter.printLine(library.getUserInformation(loggedInUser));
+                returnToMenu();
+            }
+        }
         else if(userInput.equals("Q")) {
             consoleTerminator.exitApplication();
         }
         else {
-            consolePrinter.printLine(ERROR_MESSAGE);
-            processUserInput();
+            getErrorMessageAndCheckInput();
         }
+    }
+
+    private void getErrorMessageAndCheckInput() throws IOException {
+        consolePrinter.printLine(ERROR_MESSAGE);
+        processUserInput();
     }
 
     private void tryLogIn() {
@@ -115,14 +125,30 @@ public class Console {
     }
 
     private void getMenuOptions() {
+        Map<String, String> menuOptions = new LinkedHashMap<>();
+        menuOptions.put("1", "List Of Books");
+        menuOptions.put("2", "Checkout a Book");
+        menuOptions.put("3", "Return a Book");
+        menuOptions.put("4", "List Of Movies");
+        menuOptions.put("5", "Checkout a Movie");
+        menuOptions.put("6", "Return a Movie");
+        if(loggedInUser != null){
+            menuOptions.put("D", "View my details");
+            menuOptions.put("L", "Log out");
+        } else {
+            menuOptions.put("L", "Login");
+        }
+        menuOptions.put("Q", "Quit");
+
         StringBuilder options = new StringBuilder();
-        for(Map.Entry<String, String> entry: MENU_OPTIONS.entrySet()){
+        for(Map.Entry<String, String> entry: menuOptions.entrySet()){
             options.append(entry.getKey()).append(" - ").append(entry.getValue()).append("\n");
         }
-        menuOptions = options.toString();
+        this.menuOptions = options.toString();
     }
 
     private void returnToMenu() throws IOException {
+        getMenuOptions();
         consolePrinter.print(menuOptions);
         processUserInput();
     }

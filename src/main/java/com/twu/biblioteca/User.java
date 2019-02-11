@@ -7,10 +7,17 @@ import java.util.List;
 
 public class User {
     private String userId;
+    private final String name;
+    private final String email;
+    private final String phone;
     private final String password;
     private List<ILibraryItem> checkedOutItems = new ArrayList<>();
 
-    public User(String userId, String password) {
+    public User(String userId, String password, String name, String email, String phone) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
         checkId(userId);
         this.password = password;
     }
@@ -43,5 +50,17 @@ public class User {
 
     public List<ILibraryItem> getCheckedOutItems(){
         return checkedOutItems;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

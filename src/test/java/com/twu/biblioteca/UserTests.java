@@ -14,17 +14,18 @@ import java.util.List;
 
 @RunWith(Theories.class)
 public class UserTests {
+    private User user = new User("1234-5678", "password", "name", "email", "telephone");
+
 
     @Test
     public void UserMustBeInitialisedWithIdInFormXXXXXXXX(){
-        User user = new User("1234-5678", "password");
         Assert.assertEquals("1234-5678", user.getUserId());
     }
 
     @Theory
     public void IncorrectUserIdThrowsException(String candidate){
         try {
-            new User(candidate, "password");
+            new User(candidate, "password", "name", "email", "telephone");
         } catch (IllegalArgumentException expectedEx){
             Assert.assertEquals("UserId must be in form XXXX-XXXX where X is a number", expectedEx.getMessage());
         }
@@ -33,13 +34,11 @@ public class UserTests {
 
     @Test
     public void CorrectPasswordReturnsTrue(){
-        User user = new User("1234-5678", "password");
         Boolean result = user.isCorrectPassword("password");
         Assert.assertEquals(true, result);
     }
     @Test
     public void CorrectPasswordReturnsFalse(){
-        User user = new User("1234-5678", "password");
         Boolean result = user.isCorrectPassword("password123");
         Assert.assertEquals(false, result);
     }
@@ -48,7 +47,6 @@ public class UserTests {
     public void LibraryItemsCanBeAddedToUser(){
         Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
         Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
-        User user = new User("1234-5678", "password");
         user.addItem(book1);
         user.addItem(movie2);
         List<ILibraryItem> expectedList = Arrays.asList(book1, movie2);
@@ -59,7 +57,6 @@ public class UserTests {
     public void LibraryItemsCanBeRemovedFromUser(){
         Book book1 = new Book(1,"Dark Places", "Gillian", "Flynn", 2011);
         Movie movie2 = new Movie(5, "Die Hard 2", 1992, "Director", 7);
-        User user = new User("1234-5678", "password");
         user.addItem(book1);
         user.addItem(movie2);
         user.removeItem(book1);

@@ -16,7 +16,8 @@ import static org.mockito.Mockito.*;
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nQ - Quit\n";
+    private static final String MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nL - Login\nQ - Quit\n";
+    private static final String LOGGED_IN_MENU = "1 - List Of Books\n2 - Checkout a Book\n3 - Return a Book\n4 - List Of Movies\n5 - Checkout a Movie\n6 - Return a Movie\nD - View my details\nL - Log out\nQ - Quit\n";
     private static final String USER_PROMPT_BOOK_CHECKOUT = "Enter book title or id to check out:";
     private static final String USER_PROMPT_BOOK_RETURN = "Enter book title or id to return:";
     private static final String USER_PROMPT_MOVIE_CHECKOUT = "Enter movie title or id to check out:";
@@ -76,12 +77,12 @@ public class ConsoleTests {
 
     @Test
     public void ProcessUserInputCallsLibraryDisplayBooksIfInvalidOptionSelectedUntilValidSelected() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("a", "12", "£", "", QUIT_APPLICATION);
+        when(mockConsoleReader.getNextLine()).thenReturn("a", "12", "D", "£", "", QUIT_APPLICATION);
         console.processUserInput();
 
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockConsolePrinter, times(4)).printLine("Please select a valid option!");
+        orderVerifier.verify(mockConsolePrinter, times(5)).printLine("Please select a valid option!");
     }
 
     @Test
@@ -89,6 +90,18 @@ public class ConsoleTests {
         when(mockConsoleReader.getNextLine()).thenReturn(QUIT_APPLICATION);
         console.processUserInput();
         verify(mockConsoleTerminator, times(1)).exitApplication();
+    }
+
+    @Test
+    public void UserCanLogInAndSeesDifferentMenuTAndLogOut() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("L", "L", "L", QUIT_APPLICATION);
+        when(mockUserValidator.logInUser()).thenReturn(mockUser);
+        console.processUserInput();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockUserValidator).logInUser();
     }
 
     @Test
@@ -102,6 +115,17 @@ public class ConsoleTests {
         console.processUserInput();
 
         verify(mockUserValidator, times(1)).logInUser();
+    }
+
+    @Test
+    public void LoggedInUserCanSeeTheirDetails() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("L", "D", QUIT_APPLICATION);
+        when(mockUserValidator.logInUser()).thenReturn(mockUser);
+        when(mockLibrary.getUserInformation(mockUser)).thenReturn("user info");
+        console.processUserInput();
+
+        orderVerifier.verify(mockLibrary).getUserInformation(mockUser);
+        orderVerifier.verify(mockConsolePrinter).printLine("user info");
     }
 
     @Test
@@ -119,7 +143,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockLibrary).checkOutBook(bookName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
         orderVerifier.verifyNoMoreInteractions();
@@ -138,7 +162,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_RETURN);
         orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
         orderVerifier.verifyNoMoreInteractions();
@@ -174,7 +198,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockLibrary).checkOutMovie(movieName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
         orderVerifier.verifyNoMoreInteractions();
@@ -193,7 +217,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_MOVIE_RETURN);
         orderVerifier.verify(mockLibrary, times(1)).returnMovie(movieName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
         orderVerifier.verifyNoMoreInteractions();

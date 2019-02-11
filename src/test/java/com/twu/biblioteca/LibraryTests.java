@@ -21,6 +21,8 @@ public class LibraryTests {
     private Library library;
 
     @Mock
+    User user;
+    @Mock
     User user2;
     @Mock
     User user3;
@@ -40,6 +42,11 @@ public class LibraryTests {
     public void SetUp(){
         MockitoAnnotations.initMocks(this);
         library = new Library(Arrays.asList(book1, book2, book3, movie1,  movie2), Arrays.asList(user3, user2));
+        // user 3
+        when(user3.getUserId()).thenReturn("1234-5678");
+        when(user3.getName()).thenReturn("Mr Person");
+        when(user3.getEmail()).thenReturn("email@gmail.com");
+        when(user3.getPhone()).thenReturn("04562 845678 (ext 2)");
         when(user3.getCheckedOutItems()).thenReturn(Arrays.asList(book2, movie2));
         //book 1
         when(book1.getId()).thenReturn(1);
@@ -101,6 +108,20 @@ public class LibraryTests {
         String result = library.getMovieInformation();
         String expectedResult = "5 | Die Hard 2 | 1992 | Director | 7/10\n";
         assertEquals(expectedResult, result);
+    }
+
+    // User Details
+    @Test
+    public void GetUserDetailsShouldReturnDetailsAndItemsOnLoan(){
+        String result = library.getUserInformation(user3);
+        assertEquals("Details for user 1234-5678\nName: Mr Person\nEmail: email@gmail.com\nPhone: 04562 845678 (ext 2)\n\nItems on Loan:\n2 | Talent Is Overrated | Colvin, G | 2008\n5 | Die Hard 2 | 1992 | Director | 7/10\n", result);
+    }
+
+    @Test
+    public void GetUserDetailsIncorrectUserShouldReturnError(){
+        String result = library.getUserInformation(user);
+        assertEquals("User is not a member of this library", result);
+
     }
 
     // Check Out Functionality

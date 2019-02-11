@@ -22,9 +22,8 @@ public class Library {
         StringBuilder bookInformation = new StringBuilder();
 
         for(Book book: this.getCollectionOfTypeTFilteredByLoanStatus(Book.class, false, libraryItemList)) {
-                String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
-                String[] items = {book.getId().toString(), book.getTitle(), authorName, book.getDate().toString()};
-                bookInformation.append(buildLibraryItemInformation(items));
+            String[] items = getBookProperties(book);
+            bookInformation.append(buildLibraryItemInformation(items));
         }
         return bookInformation.toString();
     }
@@ -34,7 +33,7 @@ public class Library {
         StringBuilder movieInformation = new StringBuilder();
 
         for(Movie movie: this.getCollectionOfTypeTFilteredByLoanStatus(Movie.class, false, libraryItemList)){
-            String[] items = {movie.getId().toString(), movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
+            String[] items = getMovieProperties(movie);
             movieInformation.append(buildLibraryItemInformation(items));
         }
         return movieInformation.toString();
@@ -129,6 +128,49 @@ public class Library {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public String getUserInformation(User user) {
+        if(!getUsers().contains(user)){
+            return "User is not a member of this library";
+        } else {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Details for user ");
+            stringBuilder.append(user.getUserId());
+            stringBuilder.append("\n");
+            stringBuilder.append("Name: ");
+            stringBuilder.append(user.getName());
+            stringBuilder.append("\n");
+            stringBuilder.append("Email: ");
+            stringBuilder.append(user.getEmail());
+            stringBuilder.append("\n");
+            stringBuilder.append("Phone: ");
+            stringBuilder.append(user.getPhone());
+            stringBuilder.append("\n\n");
+            stringBuilder.append("Items on Loan:");
+            stringBuilder.append("\n");
+            List<ILibraryItem> items = user.getCheckedOutItems();
+            for(ILibraryItem item: items) {
+                if(item instanceof Book){
+                    String[] properties = getBookProperties((Book)item);
+                    stringBuilder.append(buildLibraryItemInformation(properties));
+                }
+                if(item instanceof Movie){
+                    String[] properties = getMovieProperties((Movie) item);
+                    stringBuilder.append(buildLibraryItemInformation(properties));
+                }
+            }
+            return stringBuilder.toString();
+        }
+    }
+
+    private String[] getBookProperties(Book book) {
+        String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
+        return new String[]{book.getId().toString(), book.getTitle(), authorName, book.getDate().toString()};
+    }
+
+    private String[] getMovieProperties(Movie movie) {
+        return new String[]{movie.getId().toString(), movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
     }
 }
 

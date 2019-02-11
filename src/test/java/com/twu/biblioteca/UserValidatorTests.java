@@ -19,6 +19,8 @@ public class UserValidatorTests {
 
     @Mock
     User mockUser;
+    @Mock
+    User mockUser2;
 
     @Mock
     ConsoleReader mockConsoleReader;
@@ -34,7 +36,7 @@ public class UserValidatorTests {
         MockitoAnnotations.initMocks(this);
         orderVerifier = inOrder(mockConsolePrinter, mockConsoleReader, mockLibrary);
         userValidator = new UserValidator(mockConsoleReader, mockConsolePrinter, mockLibrary);
-        when(mockLibrary.getUsers()).thenReturn(Arrays.asList(mockUser, new User("1235-8906", "hello")));
+        when(mockLibrary.getUsers()).thenReturn(Arrays.asList(mockUser, mockUser2));
         when(mockUser.getUserId()).thenReturn(CORRECT_USER_ID);
         when(mockUser.isCorrectPassword(CORRECT_PASSWORD)).thenReturn(true);
     }

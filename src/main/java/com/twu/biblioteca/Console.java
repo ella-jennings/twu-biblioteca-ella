@@ -2,7 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.IMenuOption;
-import com.twu.biblioteca.MenuOptions.ListBooks;
+import com.twu.biblioteca.MenuOptions.ListItems;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -42,7 +42,9 @@ public class Console {
         this.consoleHelper = consoleHelper;
         this.userValidator = userValidator;
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
-            {put("1", new ListBooks(library));
+            {
+                put("1", new ListItems(library, Book.class));
+                put("4", new ListItems(library, Movie.class));
             }
         };
         this.consolePrinter.printLine(WELCOME_MESSAGE);
@@ -52,7 +54,7 @@ public class Console {
 
     void processUserInput() throws IOException {
         String userInput = consoleReader.getNextLine();
-        if(userInput.equals("1")){
+        if(userInput.equals("1")|| userInput.equals("4")){
             for(Map.Entry<String, IMenuOption> option: menuOptionMap.entrySet()){
                 if(userInput.equals(option.getKey())){
                     String stringToPrint = option.getValue().executeOption();
@@ -71,10 +73,6 @@ public class Console {
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
             consolePrinter.printLine(library.returnItem(Book.class, userResponse, loggedInUser));
-            returnToMenu();
-        }
-        else if (userInput.equals("4")){
-            consolePrinter.printLine(library.getInformation(Movie.class));
             returnToMenu();
         }
         else if (userInput.equals("5")){

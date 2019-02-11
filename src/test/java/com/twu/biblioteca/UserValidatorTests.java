@@ -65,16 +65,18 @@ public class UserValidatorTests {
         Assert.assertEquals(mockUser, result);
     }
 
-//    @Test
-//    public void CallingLogInUserWithIncorrectPasswordWillPromptForReAttempt(){
-//        when(mockConsoleReader.getNextLine()).thenReturn( CORRECT_USER_ID, "P#ssW0rd",CORRECT_PASSWORD);
-//        User result = userValidator.logInUser();
-//        orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
-//        orderVerifier.verify(mockConsoleReader).getNextLine();
-//        orderVerifier.verify(mockLibrary).getUsers();
-//        orderVerifier.verify(mockConsolePrinter).printLine("Please enter password: ");
-//        orderVerifier.verify(mockConsoleReader).getNextLine();
-//
-//        Assert.assertEquals(mockUser, result);
-//    }
+    @Test
+    public void CallingLogInUserWithIncorrectPasswordWillPromptForReAttempt(){
+        when(mockConsoleReader.getNextLine()).thenReturn( CORRECT_USER_ID, "P#ssW0rd",CORRECT_PASSWORD);
+        User result = userValidator.logInUser();
+        orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockLibrary).getUsers();
+        orderVerifier.verify(mockConsolePrinter).printLine("Please enter password: ");
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockConsolePrinter).printLine("Incorrect password");
+        orderVerifier.verify(mockConsolePrinter).printLine("Please enter password: ");
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        Assert.assertEquals(mockUser, result);
+    }
 }

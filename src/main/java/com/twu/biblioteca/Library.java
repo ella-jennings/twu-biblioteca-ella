@@ -18,30 +18,20 @@ public class Library {
     }
 
 
-    public String getBookInformation() {
-        StringBuilder bookInformation = new StringBuilder();
+    public <T extends ILibraryItem> String getInformation(Class<T> type) {
+        StringBuilder information = new StringBuilder();
 
-        for(Book book: this.getCollectionOfTypeTFilteredByLoanStatus(Book.class, false, libraryItemList)) {
-            String[] items = getBookProperties(book);
-            bookInformation.append(buildLibraryItemInformation(items));
+        for(ILibraryItem item: this.getCollectionOfTypeTFilteredByLoanStatus(type, false, libraryItemList)) {
+            String[] items;
+            items = (type == Book.class) ?  getBookProperties((Book) item) : getMovieProperties((Movie) item);
+            information.append(buildLibraryItemInformation(items));
         }
-        return bookInformation.toString();
+        return information.toString();
     }
 
-
-    public String getMovieInformation() {
-        StringBuilder movieInformation = new StringBuilder();
-
-        for(Movie movie: this.getCollectionOfTypeTFilteredByLoanStatus(Movie.class, false, libraryItemList)){
-            String[] items = getMovieProperties(movie);
-            movieInformation.append(buildLibraryItemInformation(items));
-        }
-        return movieInformation.toString();
-    }
-
-    <T extends ILibraryItem> String checkOut(Class<T> type, String identifier, User user) {
+    <T extends ILibraryItem> String checkOutItem(Class<T> type, String identifier, User user) {
         ILibraryItem item = locateItem(type, identifier, false, libraryItemList);
-        String typeName = type.getSimpleName().toLowerCase();
+        String typeName = getTypeName(type);
         if(item == null){
             return "Sorry, that " + typeName + " is not available";
         }
@@ -52,42 +42,22 @@ public class Library {
         }
     }
 
-    String checkOutMovie(String movieIdentifier, User user) {
-        Movie item = locateItem(Movie.class, movieIdentifier, false, libraryItemList);
-        if(item == null){
-            return "Sorry, that movie is not available";
-        }
-        else {
-            item.checkOutItem();
-            user.addItem(item);
-            return "Thank you! Enjoy the movie";
-        }
-    }
-
-    String returnBook(String bookIdentifier, User user){
-        Book itemInLibrary = locateItem(Book.class, bookIdentifier, true, libraryItemList);
-        Book itemInUserCheckOuts = locateItem(Book.class, bookIdentifier, true, user.getCheckedOutItems());
+    <T extends ILibraryItem> String returnItem(Class<T> type, String identifier, User user){
+        ILibraryItem itemInLibrary = locateItem(type, identifier, true, libraryItemList);
+        ILibraryItem itemInUserCheckOuts = locateItem(type, identifier, true, user.getCheckedOutItems());
+        String typeName = getTypeName(type);
         if(itemInLibrary == null || itemInUserCheckOuts == null){
-            return "That is not a valid book to return.";
+            return "That is not a valid "+ typeName +" to return.";
         }
         else {
             itemInLibrary.returnItem();
             user.removeItem(itemInLibrary);
-            return "Thank you for returning the book";
+            return "Thank you for returning the " + typeName;
         }
     }
 
-     String returnMovie(String movieIdentifier, User user){
-        Movie item = locateItem(Movie.class, movieIdentifier, true, libraryItemList);
-        Movie itemInUserCheckOuts = locateItem(Movie.class, movieIdentifier, true, user.getCheckedOutItems());
-        if(item == null || itemInUserCheckOuts == null){
-            return "That is not a valid movie to return.";
-        }
-        else {
-            item.returnItem();
-            user.removeItem(item);
-            return "Thank you for returning the movie";
-        }
+    private <T extends ILibraryItem> String getTypeName(Class<T> type) {
+        return type.getSimpleName().toLowerCase();
     }
 
 

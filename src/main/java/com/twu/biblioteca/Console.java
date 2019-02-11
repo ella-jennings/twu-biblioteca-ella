@@ -64,29 +64,29 @@ public class Console {
         else if (userInput.equals("2")){
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
-            consolePrinter.printLine(library.checkOut(Book.class, userResponse, loggedInUser));
+            consolePrinter.printLine(library.checkOutItem(Book.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("3")){
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
-            consolePrinter.printLine(library.returnBook(userResponse, loggedInUser));
+            consolePrinter.printLine(library.returnItem(Book.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("4")){
-            consolePrinter.printLine(library.getMovieInformation());
+            consolePrinter.printLine(library.getInformation(Movie.class));
             returnToMenu();
         }
         else if (userInput.equals("5")){
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
-            consolePrinter.printLine(library.checkOutMovie(userResponse, loggedInUser));
+            consolePrinter.printLine(library.checkOutItem(Movie.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("6")){
             tryLogIn();
             String userResponse = getItemTitleFromUser(functions.RETURN, Movie.class);
-            consolePrinter.printLine(library.returnMovie(userResponse, loggedInUser));
+            consolePrinter.printLine(library.returnItem(Movie.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if(userInput.equals("L")) {

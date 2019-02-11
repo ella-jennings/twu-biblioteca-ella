@@ -1,5 +1,6 @@
 package com.twu.biblioteca.MenuOptions;
 
+import com.twu.biblioteca.Book;
 import com.twu.biblioteca.Library;
 
 public class ListBooks implements IMenuOption {
@@ -11,7 +12,7 @@ public class ListBooks implements IMenuOption {
 
     @Override
     public String executeOption() {
-        String string = library.getBookInformation();
+        String string = library.getInformation(Book.class);
         return string;
     }
 }

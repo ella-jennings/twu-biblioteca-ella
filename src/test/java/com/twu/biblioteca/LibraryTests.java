@@ -82,7 +82,7 @@ public class LibraryTests {
 
     @Test
     public void DisplayBookInformationShouldReturnCorrectString() {
-        String result = library.getBookInformation();
+        String result = library.getInformation(Book.class);
         String expectedString = booksInformationAll;
         assertEquals(expectedString, result);
     }
@@ -90,14 +90,14 @@ public class LibraryTests {
     @Test
     public void BookOnLoanShouldRemoveItFromDisplayInformation(){
         when(book2.isOnLoan()).thenReturn(true);
-        String result = library.getBookInformation();
+        String result = library.getInformation(Book.class);
         String expectedResult = "1 | Dark Places | Flynn, G | 2011\n3 | Factfulness | Rosling, H | 2018\n";
         assertEquals(expectedResult, result);
     }
 
     @Test
     public void DisplayMovieInformationShouldReturnCorrectString() {
-        String result = library.getMovieInformation();
+        String result = library.getInformation(Movie.class);
         String expectedString = movieInformationAll;
         assertEquals(expectedString, result);
     }
@@ -105,7 +105,7 @@ public class LibraryTests {
     @Test
     public void MovieOnLoanShouldRemoveItFromDisplayInformation(){
         when(movie1.isOnLoan()).thenReturn(true);
-        String result = library.getMovieInformation();
+        String result = library.getInformation(Movie.class);
         String expectedResult = "5 | Die Hard 2 | 1992 | Director | 7/10\n";
         assertEquals(expectedResult, result);
     }
@@ -130,7 +130,7 @@ public class LibraryTests {
     @Test
     public void CheckingOutBookWithTitleShouldRemoveItFromBooksListAndReturnSuccess() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOut(Book.class, book2.getTitle(), user3);
+        String expectedSuccessMessage = library.checkOutItem(Book.class, book2.getTitle(), user3);
         assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
 
         verify(user3, times(1)).addItem(book2);
@@ -139,7 +139,7 @@ public class LibraryTests {
     @Test
     public void CheckingOutBookWithIdShouldRemoveItFromBooksListAndReturnSuccess() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOut(Book.class, book2.getId().toString(), user3);
+        String expectedSuccessMessage = library.checkOutItem(Book.class, book2.getId().toString(), user3);
         assertEquals("Thank you! Enjoy the book", expectedSuccessMessage);
         verify(user3, times(1)).addItem(book2);
     }
@@ -147,7 +147,7 @@ public class LibraryTests {
     @Test
     public void InvalidBookNameShouldNotCheckoutBookAndReturnFailure() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.checkOut(Book.class, INVALID_TITLE, user3);
+        String expectedFailureMessage = library.checkOutItem(Book.class, INVALID_TITLE, user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book2);
     }
@@ -155,7 +155,7 @@ public class LibraryTests {
     @Test
     public void InvalidBookIdShouldNotCheckoutBookAndReturnFailure() {
         when(book2.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.checkOut(Book.class,"5", user3);
+        String expectedFailureMessage = library.checkOutItem(Book.class,"5", user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book2);
     }
@@ -163,7 +163,7 @@ public class LibraryTests {
     @Test
     public void ShouldNotCheckoutBookWhenAlreadyLoanedAndReturnFailure() {
         when(book1.isOnLoan()).thenReturn(true);
-        String expectedFailureMessage = library.checkOut(Book.class,book1.getTitle(), user3);
+        String expectedFailureMessage = library.checkOutItem(Book.class,book1.getTitle(), user3);
         assertEquals("Sorry, that book is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(book1);
     }
@@ -174,7 +174,7 @@ public class LibraryTests {
     @Test
     public void CheckingOutMovieWithTitleShouldRemoveItFromBooksListAndReturnSuccess() {
         when(movie1.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOutMovie(movie1.getTitle(), user3);
+        String expectedSuccessMessage = library.checkOutItem(Movie.class, movie1.getTitle(), user3);
         assertEquals("Thank you! Enjoy the movie", expectedSuccessMessage);
         verify(user3, times(1)).addItem(movie1);
     }
@@ -182,27 +182,27 @@ public class LibraryTests {
     @Test
     public void CheckingOutMovieWithIdShouldRemoveItFromBooksListAndReturnSuccess() {
         when(movie1.isOnLoan()).thenReturn(false);
-        String expectedSuccessMessage = library.checkOutMovie(movie1.getId().toString(), user3);
+        String expectedSuccessMessage = library.checkOutItem(Movie.class, movie1.getId().toString(), user3);
         assertEquals("Thank you! Enjoy the movie", expectedSuccessMessage);
         verify(user3, times(1)).addItem(movie1);
     }
 
     @Test
     public void InvalidMovieNameShouldNotCheckoutBookAndReturnFailure() {
-        String expectedFailureMessage = library.checkOutMovie(INVALID_TITLE, user3);
+        String expectedFailureMessage = library.checkOutItem(Movie.class, INVALID_TITLE, user3);
         assertEquals("Sorry, that movie is not available", expectedFailureMessage);
     }
 
     @Test
     public void InvalidMovieIdShouldNotCheckoutBookAndReturnFailure() {
-        String expectedFailureMessage = library.checkOutMovie("2", user3);
+        String expectedFailureMessage = library.checkOutItem(Movie.class, "2", user3);
         assertEquals("Sorry, that movie is not available", expectedFailureMessage);
     }
 
     @Test
     public void ShouldNotCheckoutMovieWhenAlreadyLoanedAndReturnFailure() {
         when(movie1.isOnLoan()).thenReturn(true);
-        String expectedFailureMessage = library.checkOutMovie(movie1.getTitle(), user3);
+        String expectedFailureMessage = library.checkOutItem(Movie.class, movie1.getTitle(), user3);
         assertEquals("Sorry, that movie is not available", expectedFailureMessage);
         verify(user3, times(0)).addItem(movie1);
     }
@@ -214,21 +214,21 @@ public class LibraryTests {
     @Test
     public void ReturnBookShouldReturnBookAndReturnSuccess() {
         when(book2.isOnLoan()).thenReturn(true);
-        String expectedSuccessMessage = library.returnBook(book2.getTitle(), user3);
+        String expectedSuccessMessage = library.returnItem(Book.class, book2.getTitle(), user3);
         assertEquals("Thank you for returning the book", expectedSuccessMessage);
         verify(user3, times(1)).removeItem(book2);
     }
 
     @Test
     public void InvalidBookOrNotInTheLibraryCannotBeReturned(){
-        String expectedFailureMessage = library.returnBook(INVALID_TITLE, user3);
+        String expectedFailureMessage = library.returnItem(Book.class, INVALID_TITLE, user3);
         assertEquals("That is not a valid book to return.", expectedFailureMessage);
     }
 
     @Test
     public void BookNotOnLoanCannotBeReturned(){
         when(book1.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.returnBook(book1.getTitle(), user3);
+        String expectedFailureMessage = library.returnItem(Book.class, book1.getTitle(), user3);
         assertEquals("That is not a valid book to return.", expectedFailureMessage);
         verify(user3, times(0)).removeItem(book1);
 
@@ -237,7 +237,7 @@ public class LibraryTests {
     @Test
     public void BookOnLoanByAnotherUserCannotBeReturned(){
         when(book2.isOnLoan()).thenReturn(true);
-        String expectedFailureMessage = library.returnBook(book2.getTitle(), user2);
+        String expectedFailureMessage = library.returnItem(Book.class, book2.getTitle(), user2);
         assertEquals("That is not a valid book to return.", expectedFailureMessage);
         verify(user3, times(0)).removeItem(book2);
         verify(user2, times(0)).removeItem(book2);
@@ -248,21 +248,21 @@ public class LibraryTests {
     @Test
     public void ReturnMovieShouldReturnBookAndReturnSuccess() {
         when(movie2.isOnLoan()).thenReturn(true);
-        String expectedSuccessMessage = library.returnMovie(movie2.getTitle(), user3);
+        String expectedSuccessMessage = library.returnItem(Movie.class, movie2.getTitle(), user3);
         assertEquals("Thank you for returning the movie", expectedSuccessMessage);
         verify(user3, times(1)).removeItem(movie2);
     }
 
     @Test
     public void InvalidMovieOrNotInTheLibraryCannotBeReturned(){
-        String expectedFailureMessage = library.returnMovie(INVALID_TITLE, user3);
+        String expectedFailureMessage = library.returnItem(Movie.class, INVALID_TITLE, user3);
         assertEquals("That is not a valid movie to return.", expectedFailureMessage);
     }
 
     @Test
     public void MovieNotOnLoanCannotBeReturned(){
         when(movie2.isOnLoan()).thenReturn(false);
-        String expectedFailureMessage = library.returnMovie(movie2.getTitle(), user3);
+        String expectedFailureMessage = library.returnItem(Movie.class, movie2.getTitle(), user3);
         assertEquals("That is not a valid movie to return.", expectedFailureMessage);
         verify(user3, times(0)).removeItem(movie2);
     }
@@ -270,7 +270,7 @@ public class LibraryTests {
     @Test
     public void MovieOnLoanByAnotherUserCannotBeReturned(){
         when(movie2.isOnLoan()).thenReturn(true);
-        String expectedFailureMessage = library.returnMovie(movie2.getTitle(), user2);
+        String expectedFailureMessage = library.returnItem(Movie.class, movie2.getTitle(), user2);
         assertEquals("That is not a valid movie to return.", expectedFailureMessage);
         verify(user3, times(0)).removeItem(movie2);
         verify(user2, times(0)).removeItem(movie2);

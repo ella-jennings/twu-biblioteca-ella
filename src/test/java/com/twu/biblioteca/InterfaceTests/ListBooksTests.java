@@ -1,5 +1,6 @@
 package com.twu.biblioteca.InterfaceTests;
 
+import com.twu.biblioteca.Book;
 import com.twu.biblioteca.MenuOptions.IMenuOption;
 import com.twu.biblioteca.MenuOptions.ListBooks;
 import com.twu.biblioteca.Library;
@@ -24,6 +25,6 @@ public class ListBooksTests {
     public void ExecuteShouldCallLibraryGetBookInformation(){
         IMenuOption booksList = new ListBooks(mockLibrary);
         booksList.executeOption();
-        verify(mockLibrary).getBookInformation();
+        verify(mockLibrary).getInformation(Book.class);
     }
 }

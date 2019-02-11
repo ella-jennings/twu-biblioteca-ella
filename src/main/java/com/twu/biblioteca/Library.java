@@ -10,9 +10,11 @@ import java.util.stream.Collectors;
 public class Library {
 
     private final List<ILibraryItem> libraryItemList;
+    private List<User> users;
 
-    Library(List<ILibraryItem> listOfLibraryItems) {
+    Library(List<ILibraryItem> listOfLibraryItems, List<User> users) {
         this.libraryItemList = listOfLibraryItems;
+        this.users = users;
     }
 
 
@@ -38,7 +40,7 @@ public class Library {
         return movieInformation.toString();
     }
 
-    String checkOutBook(String bookIdentifier) {
+    String checkOutBook(String bookIdentifier, User user) {
         Book item = locateItem(Book.class, bookIdentifier, false);
         if(item == null){
             return "Sorry, that book is not available";
@@ -49,7 +51,7 @@ public class Library {
         }
     }
 
-    String checkOutMovie(String movieIdentifier) {
+    String checkOutMovie(String movieIdentifier, User user) {
         Movie item = locateItem(Movie.class, movieIdentifier, false);
         if(item == null){
             return "Sorry, that movie is not available";
@@ -117,6 +119,10 @@ public class Library {
             }
         }
         return stringToReturn.toString();
+    }
+
+    public List<User> getUsers() {
+        return users;
     }
 }
 

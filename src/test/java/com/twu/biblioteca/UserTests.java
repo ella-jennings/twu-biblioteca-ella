@@ -1,9 +1,7 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.Book;
 import com.twu.biblioteca.LibraryItems.ILibraryItem;
 import com.twu.biblioteca.LibraryItems.Movie;
-import com.twu.biblioteca.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -36,13 +34,13 @@ public class UserTests {
     @Test
     public void CorrectPasswordReturnsTrue(){
         User user = new User("1234-5678", "password");
-        Boolean result = user.correctPassword("password");
+        Boolean result = user.isCorrectPassword("password");
         Assert.assertEquals(true, result);
     }
     @Test
     public void CorrectPasswordReturnsFalse(){
         User user = new User("1234-5678", "password");
-        Boolean result = user.correctPassword("password123");
+        Boolean result = user.isCorrectPassword("password123");
         Assert.assertEquals(false, result);
     }
 

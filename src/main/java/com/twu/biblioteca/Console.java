@@ -10,8 +10,9 @@ import java.util.Map;
 
 public class Console {
     private final ConsolePrinter consolePrinter;
-    private ConsoleReader reader;
+    private ConsoleReader consoleReader;
     private ConsoleTerminator consoleTerminator;
+    private UserValidator userValidator;
     private Library library;
     private static final Map<String, String> MENU_OPTIONS = new LinkedHashMap<String, String>() {
         {
@@ -42,13 +43,15 @@ public class Console {
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private String menuOptions;
     private String userResponse;
+    private User loggedInUser;
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator) {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, UserValidator userValidator) {
         this.library = library;
         this.consolePrinter = consolePrinter;
-        this.reader = reader;
+        this.consoleReader = reader;
         this.consoleTerminator = consoleTerminator;
+        this.userValidator = userValidator;
         getMenuOptions();
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
             {put("1", new ListBooks(library));
@@ -59,7 +62,7 @@ public class Console {
     }
 
     void processUserInput() throws IOException {
-        String userInput = reader.getNextLine();
+        String userInput = consoleReader.getNextLine();
         if(userInput.equals("1")){
             for(Map.Entry<String, IMenuOption> option: menuOptionMap.entrySet()){
                 if(userInput.equals(option.getKey())){
@@ -71,7 +74,8 @@ public class Console {
         }
         else if (userInput.equals("2")){
             userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
-            consolePrinter.printLine(library.checkOutBook(userResponse));
+            loggedInUser = userValidator.logInUser();
+            consolePrinter.printLine(library.checkOutBook(userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("3")){
@@ -85,7 +89,7 @@ public class Console {
         }
         else if (userInput.equals("5")){
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
-            consolePrinter.printLine(library.checkOutMovie(userResponse));
+            consolePrinter.printLine(library.checkOutMovie(userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("6")){
@@ -117,6 +121,6 @@ public class Console {
 
     private <T> String getItemTitleFromUser(functions function, Class<T> typeOfItem) {
         consolePrinter.printLine("Enter " + typeOfItem.getSimpleName().toLowerCase() + " title or id to " + function.getTextString() + ":");
-        return reader.getNextLine();
+        return consoleReader.getNextLine();
     }
 }

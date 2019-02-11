@@ -73,8 +73,8 @@ public class Console {
             }
         }
         else if (userInput.equals("2")){
-            userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
             loggedInUser = userValidator.logInUser();
+            userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
             consolePrinter.printLine(library.checkOutBook(userResponse, loggedInUser));
             returnToMenu();
         }

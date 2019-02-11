@@ -3,13 +3,12 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.InOrder;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.mockito.InOrder;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 
@@ -49,7 +48,7 @@ public class ConsoleTests {
     public void SetUp() {
         MockitoAnnotations.initMocks(this);
         console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockUserValidator);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockUser);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockUserValidator);
     }
 
 
@@ -103,15 +102,15 @@ public class ConsoleTests {
         when(mockUserValidator.logInUser()).thenReturn(mockUser);
         console.processUserInput();
 
+        orderVerifier.verify(mockUserValidator).logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_CHECKOUT);
-//        orderVerifier.verify(mockConsoleReader).getNextLine();
-//        orderVerifier.verify(mockUserValidator).logInUser();
-//        orderVerifier.verify(mockLibrary).checkOutBook(bookName, mockUser);
-//        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-//        orderVerifier.verify(mockConsolePrinter).print(MENU);
-//        orderVerifier.verify(mockConsoleReader).getNextLine();
-//        orderVerifier.verify(mockConsoleTerminator).exitApplication();
-//        orderVerifier.verifyNoMoreInteractions();
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockLibrary).checkOutBook(bookName, mockUser);
+        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockConsoleReader).getNextLine();
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verifyNoMoreInteractions();
     }
 
     @Test public void UserCanReturnBook() throws IOException {

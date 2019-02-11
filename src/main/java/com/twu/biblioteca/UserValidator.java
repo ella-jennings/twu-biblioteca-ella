@@ -31,6 +31,10 @@ public class UserValidator {
     private void checkUserId() {
         consolePrinter.printLine("Please enter User Id: ");
         String userId = consoleReader.getNextLine();
+//        if(!userId.matches("^([0-9]){4}-([0-9]){4}$")){
+//            consolePrinter.printLine("User Id must be in format XXXX-XXXX where X is a number");
+//            checkUserId();
+//        }
         try {
             user = library.getUsers()
                     .stream()
@@ -39,7 +43,7 @@ public class UserValidator {
                     .get();
         } catch (Exception ex) {
             consolePrinter.printLine("User not found! User Id must be in format XXXX-XXXX where X is a number");
-            logInUser();
+            checkUserId();
         }
     }
 }

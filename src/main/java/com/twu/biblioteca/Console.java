@@ -42,8 +42,7 @@ public class Console {
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private String menuOptions;
-    private String userResponse;
-    private User loggedInUser;
+    private User loggedInUser = null;
 
 
     Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, UserValidator userValidator) {
@@ -73,8 +72,8 @@ public class Console {
             }
         }
         else if (userInput.equals("2")){
-            loggedInUser = userValidator.logInUser();
-            userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
+            logIn();
+            String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
             consolePrinter.printLine(library.checkOutBook(userResponse, loggedInUser));
             returnToMenu();
         }
@@ -88,6 +87,7 @@ public class Console {
             returnToMenu();
         }
         else if (userInput.equals("5")){
+            logIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
             consolePrinter.printLine(library.checkOutMovie(userResponse, loggedInUser));
             returnToMenu();
@@ -103,6 +103,12 @@ public class Console {
         else {
             consolePrinter.printLine(ERROR_MESSAGE);
             processUserInput();
+        }
+    }
+
+    private void logIn() {
+        if(loggedInUser == null) {
+            loggedInUser = userValidator.logInUser();
         }
     }
 

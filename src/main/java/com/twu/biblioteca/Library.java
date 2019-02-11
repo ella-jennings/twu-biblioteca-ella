@@ -21,7 +21,7 @@ public class Library {
     public String getBookInformation() {
         StringBuilder bookInformation = new StringBuilder();
 
-        for(Book book: this.getCollectionOfTypeTFilteredByLoanStatus(Book.class, false)) {
+        for(Book book: this.getCollectionOfTypeTFilteredByLoanStatus(Book.class, false, libraryItemList)) {
                 String authorName = book.getLastName() + ", " + book.getFirstName().substring(0,1);
                 String[] items = {book.getId().toString(), book.getTitle(), authorName, book.getDate().toString()};
                 bookInformation.append(buildLibraryItemInformation(items));
@@ -33,7 +33,7 @@ public class Library {
     public String getMovieInformation() {
         StringBuilder movieInformation = new StringBuilder();
 
-        for(Movie movie: this.getCollectionOfTypeTFilteredByLoanStatus(Movie.class, false)){
+        for(Movie movie: this.getCollectionOfTypeTFilteredByLoanStatus(Movie.class, false, libraryItemList)){
             String[] items = {movie.getId().toString(), movie.getTitle(), movie.getDate().toString(), movie.getDirector(), movie.getRating()};
             movieInformation.append(buildLibraryItemInformation(items));
         }
@@ -41,63 +41,69 @@ public class Library {
     }
 
     String checkOutBook(String bookIdentifier, User user) {
-        Book item = locateItem(Book.class, bookIdentifier, false);
+        Book item = locateItem(Book.class, bookIdentifier, false, libraryItemList);
         if(item == null){
             return "Sorry, that book is not available";
         }
         else {
             item.checkOutItem();
+            user.addItem(item);
             return "Thank you! Enjoy the book";
         }
     }
 
     String checkOutMovie(String movieIdentifier, User user) {
-        Movie item = locateItem(Movie.class, movieIdentifier, false);
+        Movie item = locateItem(Movie.class, movieIdentifier, false, libraryItemList);
         if(item == null){
             return "Sorry, that movie is not available";
         }
         else {
             item.checkOutItem();
+            user.addItem(item);
             return "Thank you! Enjoy the movie";
         }
     }
 
-    String returnBook(String bookIdentifier){
-        Book item = locateItem(Book.class, bookIdentifier, true);
-        if(item == null){
+    String returnBook(String bookIdentifier, User user){
+        Book itemInLibrary = locateItem(Book.class, bookIdentifier, true, libraryItemList);
+        Book itemInUserCheckOuts = locateItem(Book.class, bookIdentifier, true, user.getCheckedOutItems());
+        if(itemInLibrary == null || itemInUserCheckOuts == null){
             return "That is not a valid book to return.";
         }
         else {
-            item.returnItem();
+            itemInLibrary.returnItem();
+            user.removeItem(itemInLibrary);
             return "Thank you for returning the book";
         }
     }
 
-     String returnMovie(String movieIdentifier){
-        Movie item = locateItem(Movie.class, movieIdentifier, true);
-        if(item == null){
+     String returnMovie(String movieIdentifier, User user){
+        Movie item = locateItem(Movie.class, movieIdentifier, true, libraryItemList);
+        Movie itemInUserCheckOuts = locateItem(Movie.class, movieIdentifier, true, user.getCheckedOutItems());
+        if(item == null || itemInUserCheckOuts == null){
             return "That is not a valid movie to return.";
         }
         else {
             item.returnItem();
+            user.removeItem(item);
             return "Thank you for returning the movie";
         }
     }
 
 
-    private <T extends ILibraryItem> T locateItem(Class<T> type, String input, Boolean onLoan) {
+    private <T extends ILibraryItem> T locateItem(Class<T> type, String input, Boolean onLoan, List<ILibraryItem> list) {
         Predicate<ILibraryItem> idMatch = x -> x.getId().toString().equals(input);
         Predicate<ILibraryItem> titleMatch = x -> x.getTitle().equals(input);
 
-        return this.getCollectionOfTypeTFilteredByLoanStatus(type, onLoan)
+        return this.getCollectionOfTypeTFilteredByLoanStatus(type, onLoan, list)
                 .stream()
                 .filter(idMatch.or(titleMatch))
                 .findFirst()
                 .orElse(null);
     }
 
-    private <T> List<T> getCollectionOfTypeTFilteredByLoanStatus(Class<T> t, Boolean onLoan) {
-        return libraryItemList.stream()
+    private <T extends ILibraryItem> List<T> getCollectionOfTypeTFilteredByLoanStatus(Class<T> t, Boolean onLoan, List<ILibraryItem> list) {
+        return list.stream()
                 .filter(t::isInstance)
                 .filter(x -> x.isOnLoan().equals(onLoan))
                 .map(t::cast)

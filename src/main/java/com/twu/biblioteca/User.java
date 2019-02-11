@@ -35,7 +35,7 @@ public class User {
         checkedOutItems.add(item);
     }
 
-    public void removeItem(Book item) {
+    public void removeItem(ILibraryItem item) {
         if(checkedOutItems.contains(item)){
             checkedOutItems.remove(item);
         }

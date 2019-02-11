@@ -129,11 +129,14 @@ public class ConsoleTests {
         String bookName = "Dark Places";
         String messageToUser = "message";
         when(mockConsoleReader.getNextLine()).thenReturn("3", bookName, QUIT_APPLICATION);
-        when(mockLibrary.returnBook(bookName)).thenReturn(messageToUser);
+        when(mockLibrary.returnBook(bookName, mockUser)).thenReturn(messageToUser);
+        when(mockUserValidator.logInUser()).thenReturn(mockUser);
+
         console.processUserInput();
 
+        orderVerifier.verify(mockUserValidator).logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_RETURN);
-        orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName);
+        orderVerifier.verify(mockLibrary, times(1)).returnBook(bookName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();
@@ -181,11 +184,14 @@ public class ConsoleTests {
         String movieName = "movie title";
         String messageToUser = "message";
         when(mockConsoleReader.getNextLine()).thenReturn("6", movieName, QUIT_APPLICATION);
-        when(mockLibrary.returnMovie(movieName)).thenReturn(messageToUser);
+        when(mockLibrary.returnMovie(movieName, mockUser)).thenReturn(messageToUser);
+        when(mockUserValidator.logInUser()).thenReturn(mockUser);
+
         console.processUserInput();
 
+        orderVerifier.verify(mockUserValidator).logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_MOVIE_RETURN);
-        orderVerifier.verify(mockLibrary, times(1)).returnMovie(movieName);
+        orderVerifier.verify(mockLibrary, times(1)).returnMovie(movieName, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockConsoleReader).getNextLine();

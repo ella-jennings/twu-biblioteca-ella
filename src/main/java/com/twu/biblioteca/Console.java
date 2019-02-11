@@ -72,14 +72,15 @@ public class Console {
             }
         }
         else if (userInput.equals("2")){
-            logIn();
+            tryLogIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Book.class);
             consolePrinter.printLine(library.checkOutBook(userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("3")){
+            tryLogIn();
             String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
-            consolePrinter.printLine(library.returnBook(userResponse));
+            consolePrinter.printLine(library.returnBook(userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("4")){
@@ -87,14 +88,15 @@ public class Console {
             returnToMenu();
         }
         else if (userInput.equals("5")){
-            logIn();
+            tryLogIn();
             String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
             consolePrinter.printLine(library.checkOutMovie(userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("6")){
+            tryLogIn();
             String userResponse = getItemTitleFromUser(functions.RETURN, Movie.class);
-            consolePrinter.printLine(library.returnMovie(userResponse));
+            consolePrinter.printLine(library.returnMovie(userResponse, loggedInUser));
             returnToMenu();
         }
         else if(userInput.equals("Q")) {
@@ -106,7 +108,7 @@ public class Console {
         }
     }
 
-    private void logIn() {
+    private void tryLogIn() {
         if(loggedInUser == null) {
             loggedInUser = userValidator.logInUser();
         }

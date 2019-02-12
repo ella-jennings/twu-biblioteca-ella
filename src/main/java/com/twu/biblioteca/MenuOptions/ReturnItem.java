@@ -17,7 +17,7 @@ public class ReturnItem implements ILogInMenuItem {
 
     public void executeOption(User user) {
         String userResponse = consoleHelper.getItemTitleFromUser("return", typeOfItem);
-        String messageToReturn = library.returnItem(Book.class, userResponse, user);
+        String messageToReturn = library.returnItem(typeOfItem, userResponse, user);
         consolePrinter.printLine(messageToReturn);
     }
 }

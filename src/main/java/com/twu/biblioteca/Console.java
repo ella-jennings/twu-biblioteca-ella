@@ -14,19 +14,6 @@ public class Console {
     private ConsoleHelper consoleHelper;
     private UserValidator userValidator;
     private Library library;
-    private enum functions {
-        CHECK_OUT("check out"), RETURN("return");
-
-        private String textString;
-
-        functions(String textString) {
-            this.textString = textString;
-        }
-
-        public String getTextString() {
-            return textString;
-        }
-    }
     private Map<String, IMenuOption> menuOptionMap;
     private Map<String, ILogInMenuItem> checkInMenuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
@@ -59,6 +46,7 @@ public class Console {
                 put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper));
                 put("3", new ReturnItem(library, consolePrinter, Book.class, consoleHelper));
                 put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper));
+                put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper));
             }
         };
     }
@@ -77,13 +65,6 @@ public class Console {
                 checkInMenuOptionMap.get(userInput).executeOption(loggedInUser);
                 returnToMenu();
             }
-        }
-        else if (userInput.equals("6")){
-            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
-
-            String userResponse = getItemTitleFromUser(functions.RETURN, Movie.class);
-            consolePrinter.printLine(library.returnItem(Movie.class, userResponse, loggedInUser));
-            returnToMenu();
         }
         else if(userInput.equals("L")) {
             if(loggedInUser == null){
@@ -119,10 +100,5 @@ public class Console {
     private void returnToMenu() throws IOException {
         consolePrinter.print(consoleHelper.getMenu(loggedInUser));
         processUserInput();
-    }
-
-    private <T> String getItemTitleFromUser(functions function, Class<T> typeOfItem) {
-        consolePrinter.printLine("Enter " + typeOfItem.getSimpleName().toLowerCase() + " title or id to " + function.getTextString() + ":");
-        return consoleReader.getNextLine();
     }
 }

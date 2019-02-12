@@ -197,22 +197,17 @@ public class ConsoleTests {
     }
 
     @Test public void UserCanReturnMovie() throws IOException {
-        String movieName = "movie title";
-        String messageToUser = "message";
-        when(mockConsoleReader.getNextLine()).thenReturn("6", movieName, QUIT_APPLICATION);
-        when(mockLibrary.returnItem(Movie.class, movieName, mockUser)).thenReturn(messageToUser);
+        when(mockConsoleReader.getNextLine()).thenReturn("6", QUIT_APPLICATION);
         when(mockUserValidator.logInUserIfNotAlready(null)).thenReturn(mockUser);
-
+        when(mockConsoleHelper.getItemTitleFromUser("return", Movie.class)).thenReturn(MOVIE_NAME);
+        when(mockLibrary.returnItem(Movie.class, MOVIE_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
 
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator).logInUserIfNotAlready(null);
-        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_MOVIE_RETURN);
-        orderVerifier.verify(mockLibrary, times(1)).returnItem(Movie.class, movieName, mockUser);
-        orderVerifier.verify(mockConsolePrinter).printLine(messageToUser);
-        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
-        orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
-        orderVerifier.verifyNoMoreInteractions();
+        orderVerifier.verify(mockUserValidator, times(1)).logInUserIfNotAlready(null);
+        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("return", Movie.class);
+        orderVerifier.verify(mockLibrary).returnItem(Movie.class, MOVIE_NAME , mockUser);
+        orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
+        orderVerifier.verify(mockConsoleHelper).getMenu(mockUser);
     }
 }

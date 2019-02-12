@@ -2,7 +2,7 @@ package com.twu.biblioteca.MenuOptions;
 
 import com.twu.biblioteca.*;
 
-public class CheckOutItem implements ICheckOutMenuOption {
+public class CheckOutItem implements ILogInMenuItem {
     private final Library library;
     private final ConsolePrinter consolePrinter;
     private final Class typeOfItem;

@@ -153,22 +153,18 @@ public class ConsoleTests {
     }
 
     @Test public void UserCanReturnBook() throws IOException {
-        String bookName = "Dark Places";
-        when(mockConsoleReader.getNextLine()).thenReturn("3", bookName, QUIT_APPLICATION);
-        when(mockLibrary.returnItem(Book.class, bookName, mockUser)).thenReturn(MESSAGE_TO_USER);
+        when(mockConsoleReader.getNextLine()).thenReturn("3", QUIT_APPLICATION);
         when(mockUserValidator.logInUserIfNotAlready(null)).thenReturn(mockUser);
-
+        when(mockConsoleHelper.getItemTitleFromUser("return", Book.class)).thenReturn(BOOK_NAME);
+        when(mockLibrary.returnItem(Book.class, BOOK_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
 
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator).logInUserIfNotAlready(null);
-        orderVerifier.verify(mockConsolePrinter).printLine(USER_PROMPT_BOOK_RETURN);
-        orderVerifier.verify(mockLibrary, times(1)).returnItem(Book.class, bookName, mockUser);
+        orderVerifier.verify(mockUserValidator, times(1)).logInUserIfNotAlready(null);
+        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("return", Book.class);
+        orderVerifier.verify(mockLibrary).returnItem(Book.class, BOOK_NAME, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
-        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
-        orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
-        orderVerifier.verifyNoMoreInteractions();
+        orderVerifier.verify(mockConsoleHelper).getMenu(mockUser);
     }
 
     // Movie Tests

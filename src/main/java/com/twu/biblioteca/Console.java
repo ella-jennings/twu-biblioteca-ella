@@ -1,10 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
-import com.twu.biblioteca.MenuOptions.CheckOutItem;
-import com.twu.biblioteca.MenuOptions.ICheckOutMenuOption;
-import com.twu.biblioteca.MenuOptions.IMenuOption;
-import com.twu.biblioteca.MenuOptions.ListItems;
+import com.twu.biblioteca.MenuOptions.*;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -31,7 +28,7 @@ public class Console {
         }
     }
     private Map<String, IMenuOption> menuOptionMap;
-    private Map<String, ICheckOutMenuOption> checkInMenuOptionMap;
+    private Map<String, ILogInMenuItem> checkInMenuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private User loggedInUser = null;
@@ -57,9 +54,10 @@ public class Console {
                 put("4", new ListItems(library, consolePrinter, Movie.class));
             }
         };
-        checkInMenuOptionMap = new LinkedHashMap<String, ICheckOutMenuOption>(){
+        checkInMenuOptionMap = new LinkedHashMap<String, ILogInMenuItem>(){
             {
                 put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper));
+                put("3", new ReturnItem(library, consolePrinter, Book.class, consoleHelper));
                 put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper));
             }
         };
@@ -79,13 +77,6 @@ public class Console {
                 checkInMenuOptionMap.get(userInput).executeOption(loggedInUser);
                 returnToMenu();
             }
-        }
-        else if (userInput.equals("3")){
-            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
-
-            String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
-            consolePrinter.printLine(library.returnItem(Book.class, userResponse, loggedInUser));
-            returnToMenu();
         }
         else if (userInput.equals("6")){
             loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);

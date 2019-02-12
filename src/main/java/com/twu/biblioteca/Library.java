@@ -42,7 +42,7 @@ public class Library {
         }
     }
 
-    <T extends ILibraryItem> String returnItem(Class<T> type, String identifier, User user){
+    public <T extends ILibraryItem> String returnItem(Class<T> type, String identifier, User user){
         ILibraryItem itemInLibrary = locateItem(type, identifier, true, libraryItemList);
         ILibraryItem itemInUserCheckOuts = locateItem(type, identifier, true, user.getCheckedOutItems());
         String typeName = getTypeName(type);

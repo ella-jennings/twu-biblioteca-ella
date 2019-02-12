@@ -18,7 +18,7 @@ public class CheckOutItem implements ICheckOutMenuOption {
 
     public void executeOption(User user) {
         String userResponse = consoleHelper.getItemTitleFromUser("check out", typeOfItem);
-        String messageToPrint = library.checkOutItem(Book.class, userResponse, user);
+        String messageToPrint = library.checkOutItem(typeOfItem, userResponse, user);
         consolePrinter.printLine(messageToPrint);
     }
 }

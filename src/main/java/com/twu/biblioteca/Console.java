@@ -60,6 +60,7 @@ public class Console {
         checkInMenuOptionMap = new LinkedHashMap<String, ICheckOutMenuOption>(){
             {
                 put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper));
+                put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper));
             }
         };
     }
@@ -84,13 +85,6 @@ public class Console {
 
             String userResponse = getItemTitleFromUser(functions.RETURN, Book.class);
             consolePrinter.printLine(library.returnItem(Book.class, userResponse, loggedInUser));
-            returnToMenu();
-        }
-        else if (userInput.equals("5")){
-            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
-
-            String userResponse = getItemTitleFromUser(functions.CHECK_OUT, Movie.class);
-            consolePrinter.printLine(library.checkOutItem(Movie.class, userResponse, loggedInUser));
             returnToMenu();
         }
         else if (userInput.equals("6")){

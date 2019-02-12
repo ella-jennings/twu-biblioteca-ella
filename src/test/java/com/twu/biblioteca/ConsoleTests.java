@@ -19,8 +19,6 @@ public class ConsoleTests {
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
     private static final String MENU = "normal menu";
     private static final String LOGGED_IN_MENU = "Logged in menu";
-    private static final String USER_PROMPT_BOOK_RETURN = "Enter book title or id to return:";
-    private static final String USER_PROMPT_MOVIE_RETURN = "Enter movie title or id to return:";
     private static final String BOOK_INFO = "here is some book information";
     private static final String QUIT_APPLICATION = "Q";
     private static final String BOOK_NAME = "Dark Places";
@@ -57,7 +55,6 @@ public class ConsoleTests {
         orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator);
 
     }
-
 
     @Test
     public void InitialisingConsolePrintsOptionsInCorrectOrder() {
@@ -150,6 +147,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockLibrary).checkOutItem(Book.class, BOOK_NAME, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
         orderVerifier.verify(mockConsoleHelper).getMenu(mockUser);
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
     @Test public void UserCanReturnBook() throws IOException {
@@ -194,6 +192,7 @@ public class ConsoleTests {
         orderVerifier.verify(mockLibrary).checkOutItem(Movie.class, MOVIE_NAME, mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
         orderVerifier.verify(mockConsoleHelper).getMenu(mockUser);
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
     @Test public void UserCanReturnMovie() throws IOException {

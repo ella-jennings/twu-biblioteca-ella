@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Console {
+class Console {
     private final ConsolePrinter consolePrinter;
     private ConsoleReader consoleReader;
     private ConsoleTerminator consoleTerminator;
@@ -39,6 +39,7 @@ public class Console {
             {
                 put("1", new ListItems(library, consolePrinter, Book.class));
                 put("4", new ListItems(library, consolePrinter, Movie.class));
+                put("Q", new Quit(consoleTerminator));
             }
         };
         checkInMenuOptionMap = new LinkedHashMap<String, ILogInMenuItem>(){
@@ -55,9 +56,10 @@ public class Console {
         String userInput = consoleReader.getNextLine();
         if(menuOptionMap.containsKey(userInput)){
             menuOptionMap.get(userInput).executeOption();
-            returnToMenu();
+            if(!userInput.equals("Q")){
+                returnToMenu();
             }
-        else if (checkInMenuOptionMap.containsKey(userInput)){
+        } else if (checkInMenuOptionMap.containsKey(userInput)){
             loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
             if(loggedInUser == null){
                 returnToMenu();
@@ -65,8 +67,7 @@ public class Console {
                 checkInMenuOptionMap.get(userInput).executeOption(loggedInUser);
                 returnToMenu();
             }
-        }
-        else if(userInput.equals("L")) {
+        } else if(userInput.equals("L")) {
             if(loggedInUser == null){
                 loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
                 returnToMenu();
@@ -74,19 +75,14 @@ public class Console {
                 loggedInUser = null;
                 returnToMenu();
             }
-        }
-        else if(userInput.equals("D")){
+        } else if(userInput.equals("D")){
             if(loggedInUser == null){
                 getErrorMessageAndCheckInput();
             } else {
                 consolePrinter.printLine(library.getUserInformation(loggedInUser));
                 returnToMenu();
             }
-        }
-        else if(userInput.equals("Q")) {
-            consoleTerminator.exitApplication();
-        }
-        else {
+        } else {
             getErrorMessageAndCheckInput();
         }
     }

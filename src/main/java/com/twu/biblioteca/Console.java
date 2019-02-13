@@ -42,6 +42,7 @@ class Console {
                 put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
                 put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
                 put("L", new Login(userValidator));
+                put("D", new GetDetails(library, consolePrinter, userValidator));
                 put("Q", new Quit(consoleTerminator));
             }
         };
@@ -54,21 +55,14 @@ class Console {
             if(!userInput.equals("Q")){
                 returnToMenu();
             }
-        } else if(userInput.equals("D")){
-            if(!userValidator.userIsLoggedIn()){
-                getErrorMessageAndCheckInput();
-            } else {
-                consolePrinter.printLine(library.getUserInformation(userValidator.getCurrentUser()));
-                returnToMenu();
-            }
         } else {
-            getErrorMessageAndCheckInput();
+            getErrorMessage();
         }
     }
 
-    private void getErrorMessageAndCheckInput() throws IOException {
+    private void getErrorMessage() throws IOException {
         consolePrinter.printLine(ERROR_MESSAGE);
-        processUserInput();
+        returnToMenu();
     }
 
 

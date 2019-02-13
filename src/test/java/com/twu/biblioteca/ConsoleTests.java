@@ -110,17 +110,18 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(mockUserValidator, times(1)).logInUser();
     }
-//
-//    @Test
-//    public void LoggedInUserCanSeeTheirDetails() throws IOException {
-//        when(mockConsoleReader.getNextLine()).thenReturn("L", "D", QUIT_APPLICATION);
-//        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-//        when(mockLibrary.getUserInformation(mockUser)).thenReturn("user info");
-//        console.processUserInput();
-//
-//        orderVerifier.verify(mockLibrary, times(1)).getUserInformation(mockUser);
-//        orderVerifier.verify(mockConsolePrinter).printLine("user info");
-//    }
+
+    @Test
+    public void LoggedInUserCanSeeTheirDetails() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("L", "D", QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(true);
+        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
+        when(mockLibrary.getUserInformation(mockUser)).thenReturn("user info");
+        console.processUserInput();
+
+        orderVerifier.verify(mockLibrary, times(1)).getUserInformation(mockUser);
+        orderVerifier.verify(mockConsolePrinter).printLine("user info");
+    }
 
     @Test
     public void UserCanCheckOutBook() throws IOException {

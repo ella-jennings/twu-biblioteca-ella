@@ -2,11 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.MenuOptions.*;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.experimental.theories.Theories;
-import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,7 +11,6 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(Theories.class)
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
@@ -23,9 +18,6 @@ public class ConsoleTests {
     private static final String LOGGED_IN_MENU = "Logged in menu";
     private static final String QUIT_APPLICATION = "Q";
     private static final String ERROR_MESSAGE = "Please select a valid option!";
-
-
-
     private InOrder orderVerifier;
 
     @Mock
@@ -59,9 +51,6 @@ public class ConsoleTests {
     @Mock
     Quit quit;
 
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-
     @Before
     public void SetUp() {
         MockitoAnnotations.initMocks(this);
@@ -69,8 +58,6 @@ public class ConsoleTests {
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
         console = new Console(mockConsolePrinter, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, login, quit);
         orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, login, quit);
-
-
     }
 
     @Test
@@ -104,6 +91,7 @@ public class ConsoleTests {
         when(mockConsoleReader.getNextLine()).thenReturn("D", QUIT_APPLICATION);
         console.processUserInput();
         orderVerifier.verify(getDetails).executeOption();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(quit).executeOption();
         orderVerifier.verifyNoMoreInteractions();
     }
@@ -113,6 +101,7 @@ public class ConsoleTests {
         when(mockConsoleReader.getNextLine()).thenReturn("L", QUIT_APPLICATION);
         console.processUserInput();
         orderVerifier.verify(login).executeOption();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verify(quit).executeOption();
         orderVerifier.verifyNoMoreInteractions();
     }
@@ -136,6 +125,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(checkOutBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(quit).executeOption();
     }
 
@@ -146,6 +136,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(returnBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(quit).executeOption();
 
     }
@@ -170,6 +161,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(checkOutMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(quit).executeOption();
 
     }
@@ -182,6 +174,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(returnMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
         orderVerifier.verify(quit).executeOption();
 
     }

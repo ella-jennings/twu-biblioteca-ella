@@ -28,6 +28,8 @@ public class ConsoleTests {
     private static final String BOOK_NAME = "Dark Places";
     private static final String MOVIE_NAME = "Movie name";
     private static final String MESSAGE_TO_USER = "message";
+    private static final String ERROR_MESSAGE = "Please select a valid option!";
+
 
 
     private InOrder orderVerifier;
@@ -57,6 +59,7 @@ public class ConsoleTests {
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
         console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator);
         orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator);
+
 
     }
 
@@ -90,7 +93,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockConsolePrinter, times(5)).printLine("Please select a valid option!");
+        orderVerifier.verify(mockConsolePrinter, times(5)).printLine(ERROR_MESSAGE);
     }
 
     @Test
@@ -125,6 +128,15 @@ public class ConsoleTests {
 
         orderVerifier.verify(mockLibrary, times(1)).getUserInformation(mockUser);
         orderVerifier.verify(mockConsolePrinter).printLine("user info");
+    }
+
+    @Test
+    public void LoggedOutUserGetsErrorMessage() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn( "D", QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false);
+        console.processUserInput();
+
+        orderVerifier.verify(mockConsolePrinter).printLine(ERROR_MESSAGE);
     }
 
     @Test

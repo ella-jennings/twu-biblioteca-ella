@@ -96,19 +96,21 @@ public class ConsoleTests {
         verify(mockConsoleTerminator, times(1)).exitApplication();
     }
 
-//    @Test
-//    public void UserCanLogInAndSeesDifferentMenuAndLogOut() throws IOException {
-//        when(mockConsoleReader.getNextLine()).thenReturn("L", "L", "L", QUIT_APPLICATION);
-//        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-//        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true, false);
-//        console.processUserInput();
-//        orderVerifier.verify(mockConsolePrinter).print(MENU);
-//        orderVerifier.verify(mockUserValidator, times(1)).logInUserIfNotAlready();
-//        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
-//        orderVerifier.verify(mockConsolePrinter).print(MENU);
-//        orderVerifier.verify(mockUserValidator, times(1)).logInUserIfNotAlready();
-//    }
-
+    @Test
+    public void UserCanLogInAndSeesDifferentMenuAndLogOut() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("L", "L", "L", QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false,true, true, false, false, false);
+        when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
+        when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
+        console.processUserInput();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
+        orderVerifier.verify(mockUserValidator, times(1)).logOutUser();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+    }
+//
 //    @Test
 //    public void LoggedInUserCanSeeTheirDetails() throws IOException {
 //        when(mockConsoleReader.getNextLine()).thenReturn("L", "D", QUIT_APPLICATION);

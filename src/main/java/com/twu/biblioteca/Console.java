@@ -41,6 +41,7 @@ class Console {
                 put("4", new ListItems(library, consolePrinter, Movie.class));
                 put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
                 put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
+                put("L", new Login(userValidator));
                 put("Q", new Quit(consoleTerminator));
             }
         };
@@ -51,14 +52,6 @@ class Console {
         if(menuOptionMap.containsKey(userInput)){
             menuOptionMap.get(userInput).executeOption();
             if(!userInput.equals("Q")){
-                returnToMenu();
-            }
-        } else if(userInput.equals("L")) {
-            if(!userValidator.userIsLoggedIn()){
-                userValidator.logInUser();
-                returnToMenu();
-            } else {
-                userValidator.logOutUser();
                 returnToMenu();
             }
         } else if(userInput.equals("D")){

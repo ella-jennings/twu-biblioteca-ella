@@ -1,6 +1,8 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
+import com.twu.biblioteca.MenuOptions.CheckOutItem;
+import com.twu.biblioteca.MenuOptions.ReturnItem;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,6 +50,14 @@ public class ConsoleTests {
     UserValidator mockUserValidator;
     @Mock
     ConsoleHelper mockConsoleHelper;
+    @Mock
+    CheckOutItem checkOutBook;
+    @Mock
+    CheckOutItem checkOutMovie;
+    @Mock
+    ReturnItem returnBook;
+    @Mock
+    ReturnItem returnMovie;
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -57,8 +67,8 @@ public class ConsoleTests {
         MockitoAnnotations.initMocks(this);
         when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
-        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator, checkOutBook, checkOutMovie, returnBook, returnMovie);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, checkOutBook, checkOutMovie, returnBook, returnMovie);
 
 
     }
@@ -143,16 +153,9 @@ public class ConsoleTests {
     public void UserCanCheckOutBook() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("2", QUIT_APPLICATION);
         when(mockUserValidator.userIsLoggedIn()).thenReturn(true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        when(mockConsoleHelper.getItemTitleFromUser("check out", Book.class)).thenReturn(BOOK_NAME);
-        when(mockLibrary.checkOutItem(Book.class, BOOK_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("check out", Book.class);
-        orderVerifier.verify(mockLibrary).checkOutItem(Book.class, BOOK_NAME, mockUser);
-        orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
+        orderVerifier.verify(checkOutBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
@@ -160,18 +163,11 @@ public class ConsoleTests {
     @Test public void UserCanReturnBook() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("3", QUIT_APPLICATION);
         when(mockUserValidator.userIsLoggedIn()).thenReturn(true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        when(mockConsoleHelper.getItemTitleFromUser("return", Book.class)).thenReturn(BOOK_NAME);
-        when(mockLibrary.returnItem(Book.class, BOOK_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
-
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("return", Book.class);
-        orderVerifier.verify(mockLibrary).returnItem(Book.class, BOOK_NAME, mockUser);
-        orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
+        orderVerifier.verify(returnBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
     // Movie Tests
@@ -192,95 +188,22 @@ public class ConsoleTests {
     @Test
     public void UserCanCheckOutMovie() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("5", QUIT_APPLICATION);
-        when(mockConsoleHelper.getItemTitleFromUser("check out", Movie.class)).thenReturn(MOVIE_NAME);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
         when(mockUserValidator.userIsLoggedIn()).thenReturn(true);
-        when(mockLibrary.checkOutItem(Movie.class, MOVIE_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("check out", Movie.class);
-        orderVerifier.verify(mockLibrary).checkOutItem(Movie.class, MOVIE_NAME, mockUser);
-        orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
+        orderVerifier.verify(checkOutMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
         orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
-    @Test public void UserCanReturnMovie() throws IOException {
+    @Test
+    public void UserCanReturnMovie() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("6", QUIT_APPLICATION);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
         when(mockUserValidator.userIsLoggedIn()).thenReturn(true);
-        when(mockConsoleHelper.getItemTitleFromUser("return", Movie.class)).thenReturn(MOVIE_NAME);
-        when(mockLibrary.returnItem(Movie.class, MOVIE_NAME, mockUser)).thenReturn(MESSAGE_TO_USER);
-
         console.processUserInput();
 
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-        orderVerifier.verify(mockConsoleHelper).getItemTitleFromUser("return", Movie.class);
-        orderVerifier.verify(mockLibrary).returnItem(Movie.class, MOVIE_NAME , mockUser);
-        orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
+        orderVerifier.verify(returnMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
+        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
-
-    // generic check out/return
-
-    @Theory
-    public void UserMustLogInToCheckOutItem(String checkOutCandidate) throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn(checkOutCandidate, QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-    }
-
-    @Theory
-    public void UserReturnsIfNotLoggedInToCheckOutItem(String checkOutCandidate) throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn(checkOutCandidate, QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(2)).userIsLoggedIn();
-        orderVerifier.verify(mockConsoleHelper, times(1)).getMenu(false);
-        verify(mockUserValidator, times(0)).getCurrentUser();
-    }
-
-    public static @DataPoints String[] checkOutCandidates = {"2", "5"};
-
-
-    @Theory
-    public void UserMustLogInToReturnItem(String returnCandidate) throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn(returnCandidate, QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-    }
-
-    @Theory
-    public void UserReturnsIfNotLoggedInToReturnItem(String returnCandidate) throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn(returnCandidate, QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(2)).userIsLoggedIn();
-        orderVerifier.verify(mockConsoleHelper, times(1)).getMenu(false);
-        verify(mockUserValidator, times(0)).getCurrentUser();
-    }
-    public static @DataPoints String[] returnCandidates = {"3", "6"};
 }

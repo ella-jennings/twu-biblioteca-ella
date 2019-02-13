@@ -13,19 +13,27 @@ class Console {
     private ConsoleTerminator consoleTerminator;
     private ConsoleHelper consoleHelper;
     private UserValidator userValidator;
+    private final CheckOutItem checkOutBook;
+    private final CheckOutItem checkOutMovie;
+    private final ReturnItem returnBook;
+    private final ReturnItem returnMovie;
     private Library library;
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator) {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie) {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.consoleReader = reader;
         this.consoleTerminator = consoleTerminator;
         this.consoleHelper = consoleHelper;
         this.userValidator = userValidator;
+        this.checkOutBook = checkOutBook;
+        this.checkOutMovie = checkOutMovie;
+        this.returnBook = returnBook;
+        this.returnMovie = returnMovie;
         setUpOptions(library, consolePrinter, consoleHelper);
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         String menu = consoleHelper.getMenu(userValidator.userIsLoggedIn());
@@ -36,11 +44,11 @@ class Console {
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
             {
                 put("1", new ListItems(library, consolePrinter, Book.class));
-                put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper, userValidator));
-                put("3", new ReturnItem(library, consolePrinter, Book.class, consoleHelper, userValidator));
+                put("2", checkOutBook);
+                put("3", returnBook);
                 put("4", new ListItems(library, consolePrinter, Movie.class));
-                put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
-                put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
+                put("5", checkOutMovie);
+                put("6", returnMovie);
                 put("L", new Login(userValidator));
                 put("D", new GetDetails(library, consolePrinter, userValidator));
                 put("Q", new Quit(consoleTerminator));

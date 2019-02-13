@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.CheckOutItem;
 import com.twu.biblioteca.MenuOptions.ListItems;
+import com.twu.biblioteca.MenuOptions.Quit;
 import com.twu.biblioteca.MenuOptions.ReturnItem;
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,6 +64,8 @@ public class ConsoleTests {
     ReturnItem returnBook;
     @Mock
     ReturnItem returnMovie;
+    @Mock
+    Quit quit;
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -72,8 +75,8 @@ public class ConsoleTests {
         MockitoAnnotations.initMocks(this);
         when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
-        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, quit);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, quit);
 
 
     }
@@ -100,7 +103,8 @@ public class ConsoleTests {
     public void UserInputQWillQuitApplication() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn(QUIT_APPLICATION);
         console.processUserInput();
-        verify(mockConsoleTerminator, times(1)).exitApplication();
+        orderVerifier.verify(quit).executeOption();
+        orderVerifier.verifyNoMoreInteractions();
     }
 
     @Test
@@ -158,7 +162,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(checkOutBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verify(quit).executeOption();
     }
 
     @Test public void UserCanReturnBook() throws IOException {
@@ -168,7 +172,8 @@ public class ConsoleTests {
 
         orderVerifier.verify(returnBook).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verify(quit).executeOption();
+
     }
 
     // Movie Tests
@@ -191,7 +196,8 @@ public class ConsoleTests {
 
         orderVerifier.verify(checkOutMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verify(quit).executeOption();
+
     }
 
     @Test
@@ -202,6 +208,7 @@ public class ConsoleTests {
 
         orderVerifier.verify(returnMovie).executeOption();
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
+        orderVerifier.verify(quit).executeOption();
+
     }
 }

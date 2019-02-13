@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.*;
 
 import java.io.IOException;
@@ -19,13 +18,14 @@ class Console {
     private final CheckOutItem checkOutMovie;
     private final ReturnItem returnBook;
     private final ReturnItem returnMovie;
+    private Quit quit;
     private Library library;
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie) {
+    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie, Quit quit) {
         this.library = library;
         this.consolePrinter = consolePrinter;
         this.consoleReader = reader;
@@ -38,13 +38,14 @@ class Console {
         this.checkOutMovie = checkOutMovie;
         this.returnBook = returnBook;
         this.returnMovie = returnMovie;
-        setUpOptions(library, consolePrinter, consoleHelper);
+        this.quit = quit;
+        setUpOptions();
         this.consolePrinter.printLine(WELCOME_MESSAGE);
         String menu = consoleHelper.getMenu(userValidator.userIsLoggedIn());
         this.consolePrinter.print(menu);
     }
 
-    private void setUpOptions(Library library, ConsolePrinter consolePrinter, ConsoleHelper consoleHelper) {
+    private void setUpOptions() {
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
             {
                 put("1", listBook);
@@ -55,7 +56,7 @@ class Console {
                 put("6", returnMovie);
                 put("L", new Login(userValidator));
                 put("D", new GetDetails(library, consolePrinter, userValidator));
-                put("Q", new Quit(consoleTerminator));
+                put("Q", quit);
             }
         };
     }

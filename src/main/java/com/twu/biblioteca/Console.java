@@ -15,10 +15,8 @@ class Console {
     private UserValidator userValidator;
     private Library library;
     private Map<String, IMenuOption> menuOptionMap;
-    private Map<String, ILogInMenuItem> checkInMenuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
-    private User loggedInUser = null;
 
 
     Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator) {
@@ -30,7 +28,7 @@ class Console {
         this.userValidator = userValidator;
         setUpOptions(library, consolePrinter, consoleHelper);
         this.consolePrinter.printLine(WELCOME_MESSAGE);
-        String menu = consoleHelper.getMenu(loggedInUser);
+        String menu = consoleHelper.getMenu(userValidator.userIsLoggedIn());
         this.consolePrinter.print(menu);
     }
 
@@ -38,16 +36,12 @@ class Console {
         menuOptionMap = new LinkedHashMap<String, IMenuOption>(){
             {
                 put("1", new ListItems(library, consolePrinter, Book.class));
+                put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper, userValidator));
+                put("3", new ReturnItem(library, consolePrinter, Book.class, consoleHelper, userValidator));
                 put("4", new ListItems(library, consolePrinter, Movie.class));
+                put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
+                put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator));
                 put("Q", new Quit(consoleTerminator));
-            }
-        };
-        checkInMenuOptionMap = new LinkedHashMap<String, ILogInMenuItem>(){
-            {
-                put("2", new CheckOutItem(library, consolePrinter, Book.class, consoleHelper));
-                put("3", new ReturnItem(library, consolePrinter, Book.class, consoleHelper));
-                put("5", new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper));
-                put("6", new ReturnItem(library, consolePrinter, Movie.class, consoleHelper));
             }
         };
     }
@@ -59,27 +53,19 @@ class Console {
             if(!userInput.equals("Q")){
                 returnToMenu();
             }
-        } else if (checkInMenuOptionMap.containsKey(userInput)){
-            loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
-            if(loggedInUser == null){
-                returnToMenu();
-            } else {
-                checkInMenuOptionMap.get(userInput).executeOption(loggedInUser);
-                returnToMenu();
-            }
         } else if(userInput.equals("L")) {
-            if(loggedInUser == null){
-                loggedInUser = userValidator.logInUserIfNotAlready(loggedInUser);
+            if(!userValidator.userIsLoggedIn()){
+                userValidator.logInUser();
                 returnToMenu();
             } else {
-                loggedInUser = null;
+                userValidator.logOutUser();
                 returnToMenu();
             }
         } else if(userInput.equals("D")){
-            if(loggedInUser == null){
+            if(!userValidator.userIsLoggedIn()){
                 getErrorMessageAndCheckInput();
             } else {
-                consolePrinter.printLine(library.getUserInformation(loggedInUser));
+                consolePrinter.printLine(library.getUserInformation(userValidator.getCurrentUser()));
                 returnToMenu();
             }
         } else {
@@ -94,7 +80,7 @@ class Console {
 
 
     private void returnToMenu() throws IOException {
-        consolePrinter.print(consoleHelper.getMenu(loggedInUser));
+        consolePrinter.print(consoleHelper.getMenu(userValidator.userIsLoggedIn()));
         processUserInput();
     }
 }

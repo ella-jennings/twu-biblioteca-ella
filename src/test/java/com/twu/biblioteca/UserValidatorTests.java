@@ -41,40 +41,47 @@ public class UserValidatorTests {
         when(mockUser.isCorrectPassword(CORRECT_PASSWORD)).thenReturn(true);
     }
 
+
     @Test
     public void LogInUserWillReturnUserDetails(){
         when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID, CORRECT_PASSWORD);
-        User user = userValidator.logInUserIfNotAlready(null);
-        Assert.assertEquals(mockUser, user);
+        userValidator.logInUser();
+        Assert.assertEquals(mockUser, userValidator.getCurrentUser());
+        Assert.assertEquals(true, userValidator.userIsLoggedIn());
     }
 
     @Test
     public void LogInWillReturnNullWith5IncorrectUserDetails() {
         when(mockConsoleReader.getNextLine()).thenReturn("45-23", "45-1231243", "34534534", "q", "dgdf");
-        User user = userValidator.logInUserIfNotAlready(null);
+        userValidator.logInUser();
         verify(mockConsolePrinter).printLine("User attempts max reached");
-        Assert.assertEquals(null, user);
+        Assert.assertEquals(null, userValidator.getCurrentUser());
+        Assert.assertEquals(false, userValidator.userIsLoggedIn());
+
     }
 
     @Test
     public void LogInWillReturnNullWithCorrectUserDetailsAnd5AttemptsIncorrectPasswordDetails() {
         when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID,"45-23", "45-1231243", "34534534", "q", "dgdf");
-        User user = userValidator.logInUserIfNotAlready(null);
+        userValidator.logInUser();
         verify(mockConsolePrinter).printLine("Password attempts max reached");
-        Assert.assertEquals(null, user);
+        Assert.assertEquals(null, userValidator.getCurrentUser());
+        Assert.assertEquals(false, userValidator.userIsLoggedIn());
     }
 
     @Test
     public void CallingLogInUserAndProvidingCorrectDetailsWillReturnUserProfile() {
         when(mockConsoleReader.getNextLine()).thenReturn(CORRECT_USER_ID, CORRECT_PASSWORD);
-        User user = userValidator.logInUser();
-        Assert.assertEquals(mockUser, user);
+        userValidator.logInUser();
+        Assert.assertEquals(mockUser, userValidator.getCurrentUser());
+        Assert.assertEquals(true, userValidator.userIsLoggedIn());
+
     }
 
     @Test
     public void CallingLogInUserWithIncorrectDetailsWillPromptForReAttempt(){
         when(mockConsoleReader.getNextLine()).thenReturn("45-23", "9999-9999", CORRECT_USER_ID, CORRECT_PASSWORD);
-        User result = userValidator.logInUser();
+        userValidator.logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockConsolePrinter).printLine("User Id must be in format XXXX-XXXX where X is a number");
@@ -87,13 +94,13 @@ public class UserValidatorTests {
         orderVerifier.verify(mockLibrary).getUsers();
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter password: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
-        Assert.assertEquals(mockUser, result);
+        Assert.assertEquals(mockUser, userValidator.getCurrentUser());
     }
 
     @Test
     public void CallingLogInUserWithIncorrectPasswordWillPromptForReAttempt(){
         when(mockConsoleReader.getNextLine()).thenReturn( CORRECT_USER_ID, "P#ssW0rd",CORRECT_PASSWORD);
-        User result = userValidator.logInUser();
+        userValidator.logInUser();
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter User Id: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
         orderVerifier.verify(mockLibrary).getUsers();
@@ -102,6 +109,6 @@ public class UserValidatorTests {
         orderVerifier.verify(mockConsolePrinter).printLine("Incorrect password");
         orderVerifier.verify(mockConsolePrinter).printLine("Please enter password: ");
         orderVerifier.verify(mockConsoleReader).getNextLine();
-        Assert.assertEquals(mockUser, result);
+        Assert.assertEquals(mockUser, userValidator.getCurrentUser());
     }
 }

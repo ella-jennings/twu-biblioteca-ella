@@ -13,7 +13,7 @@ public class ConsoleHelper {
         this.consoleReader = consoleReader;
     }
 
-    public String getMenu(User user) {
+    public String getMenu(Boolean userIsLoggedIn) {
         Map<String, String> menuOptions = new LinkedHashMap<>();
         menuOptions.put("1", "List Of Books");
         menuOptions.put("2", "Checkout a Book");
@@ -21,7 +21,7 @@ public class ConsoleHelper {
         menuOptions.put("4", "List Of Movies");
         menuOptions.put("5", "Checkout a Movie");
         menuOptions.put("6", "Return a Movie");
-        if(user != null){
+        if(userIsLoggedIn){
             menuOptions.put("D", "View my details");
             menuOptions.put("L", "Log out");
         } else {

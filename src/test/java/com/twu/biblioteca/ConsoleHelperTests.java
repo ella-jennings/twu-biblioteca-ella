@@ -36,13 +36,13 @@ public class ConsoleHelperTests {
 
     @Test
     public void CallingGetMenuWithNullUserReturnsBasicMenu(){
-        String menu = consoleHelper.getMenu(null);
+        String menu = consoleHelper.getMenu(false);
         Assert.assertEquals(MENU, menu);
     }
 
     @Test
     public void CallingGetMenuWithLoggedInUserReturnsBasicMenu(){
-        String menu = consoleHelper.getMenu(mockUser);
+        String menu = consoleHelper.getMenu(true);
         Assert.assertEquals(LOGGED_IN_USER, menu);
     }
 

@@ -5,6 +5,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -13,7 +17,7 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
-
+@RunWith(Theories.class)
 public class ConsoleTests {
     private Console console;
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
@@ -172,32 +176,6 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
-    @Test
-    public void UserMustLogInToCheckOutMovie() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("5", QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-    }
-
-
-    @Test
-    public void UserMustLogInToReturnMovie() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("6", QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
-        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
-        console.processUserInput();
-
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
-        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
-    }
 
     @Test
     public void UserCanCheckOutMovie() throws IOException {
@@ -233,4 +211,64 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).printLine(MESSAGE_TO_USER);
         orderVerifier.verify(mockConsoleHelper).getMenu(true);
     }
+
+    // generic check out/return
+
+    @Theory
+    public void UserMustLogInToCheckOutItem(String checkOutCandidate) throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn(checkOutCandidate, QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
+        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
+    }
+
+    @Theory
+    public void UserReturnsIfNotLoggedInToCheckOutItem(String checkOutCandidate) throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn(checkOutCandidate, QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false);
+        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockUserValidator, times(2)).userIsLoggedIn();
+        orderVerifier.verify(mockConsoleHelper, times(1)).getMenu(false);
+        verify(mockUserValidator, times(0)).getCurrentUser();
+    }
+
+    public static @DataPoints String[] checkOutCandidates = {"2", "5"};
+
+
+    @Theory
+    public void UserMustLogInToReturnItem(String returnCandidate) throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn(returnCandidate, QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false, true);
+        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).getCurrentUser();
+    }
+
+    @Theory
+    public void UserReturnsIfNotLoggedInToReturnItem(String returnCandidate) throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn(returnCandidate, QUIT_APPLICATION);
+        when(mockUserValidator.userIsLoggedIn()).thenReturn(false);
+        when(mockUserValidator.getCurrentUser()).thenReturn(mockUser);
+        console.processUserInput();
+
+        orderVerifier.verify(mockUserValidator, times(1)).userIsLoggedIn();
+        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(mockUserValidator, times(2)).userIsLoggedIn();
+        orderVerifier.verify(mockConsoleHelper, times(1)).getMenu(false);
+        verify(mockUserValidator, times(0)).getCurrentUser();
+    }
+    public static @DataPoints String[] returnCandidates = {"3", "6"};
 }

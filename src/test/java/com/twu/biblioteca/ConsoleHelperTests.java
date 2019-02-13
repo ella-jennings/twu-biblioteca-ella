@@ -20,9 +20,6 @@ public class ConsoleHelperTests {
     private static final String USER_PROMPT_MOVIE_RETURN = "Enter movie title or id to return:";
 
     @Mock
-    User mockUser;
-
-    @Mock
     ConsolePrinter consolePrinter;
 
     @Mock
@@ -41,7 +38,7 @@ public class ConsoleHelperTests {
     }
 
     @Test
-    public void CallingGetMenuWithLoggedInUserReturnsBasicMenu(){
+    public void CallingGetMenuWithLoggedInUserReturnsUserMenu(){
         String menu = consoleHelper.getMenu(true);
         Assert.assertEquals(LOGGED_IN_USER, menu);
     }

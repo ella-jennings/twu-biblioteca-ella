@@ -18,13 +18,14 @@ class Console {
     private final ReturnItem returnBook;
     private final ReturnItem returnMovie;
     private GetDetails getDetails;
+    private Login login;
     private Quit quit;
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
 
 
-    Console(ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie, GetDetails getDetails, Quit quit) {
+    Console(ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie, GetDetails getDetails, Login login, Quit quit) {
         this.consolePrinter = consolePrinter;
         this.consoleReader = reader;
         this.consoleHelper = consoleHelper;
@@ -36,6 +37,7 @@ class Console {
         this.returnBook = returnBook;
         this.returnMovie = returnMovie;
         this.getDetails = getDetails;
+        this.login = login;
         this.quit = quit;
         setUpOptions();
         this.consolePrinter.printLine(WELCOME_MESSAGE);
@@ -52,7 +54,7 @@ class Console {
                 put("4", listMovie);
                 put("5", checkOutMovie);
                 put("6", returnMovie);
-                put("L", new Login(userValidator));
+                put("L", login);
                 put("D", getDetails);
                 put("Q", quit);
             }

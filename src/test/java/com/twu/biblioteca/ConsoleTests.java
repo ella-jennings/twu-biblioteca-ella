@@ -55,6 +55,8 @@ public class ConsoleTests {
     @Mock
     GetDetails getDetails;
     @Mock
+    Login login;
+    @Mock
     Quit quit;
 
     @Rule
@@ -65,8 +67,8 @@ public class ConsoleTests {
         MockitoAnnotations.initMocks(this);
         when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
-        console = new Console(mockConsolePrinter, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, quit);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, quit);
+        console = new Console(mockConsolePrinter, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, login, quit);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, login, quit);
 
 
     }
@@ -107,18 +109,12 @@ public class ConsoleTests {
     }
 
     @Test
-    public void UserCanLogInAndSeesDifferentMenuAndLogOut() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("L", "L", "L", QUIT_APPLICATION);
-        when(mockUserValidator.userIsLoggedIn()).thenReturn(false,true, true, false, false, false);
-        when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
-        when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
+    public void UserCanLogInAndLogOut() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("L", QUIT_APPLICATION);
         console.processUserInput();
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
-        orderVerifier.verify(mockConsolePrinter).print(LOGGED_IN_MENU);
-        orderVerifier.verify(mockUserValidator, times(1)).logOutUser();
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockUserValidator, times(1)).logInUser();
+        orderVerifier.verify(login).executeOption();
+        orderVerifier.verify(quit).executeOption();
+        orderVerifier.verifyNoMoreInteractions();
     }
 
     // Book Tests

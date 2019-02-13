@@ -32,8 +32,9 @@ public class BibliotecaApp {
         ReturnItem returnBook = new ReturnItem(library, consolePrinter, Book.class, consoleHelper, userValidator);
         ReturnItem returnMovie = new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator);
         GetDetails getDetails = new GetDetails(library, consolePrinter, userValidator);
+        Login login = new Login(userValidator);
         Quit quit = new Quit(consoleTerminator);
-        new Console(consolePrinter, consoleReader, consoleHelper, userValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, quit).processUserInput();
+        new Console(consolePrinter, consoleReader, consoleHelper, userValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, login, quit).processUserInput();
     }
 
 }

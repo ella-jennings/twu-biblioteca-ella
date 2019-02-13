@@ -1,14 +1,10 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
-import com.twu.biblioteca.MenuOptions.CheckOutItem;
-import com.twu.biblioteca.MenuOptions.ListItems;
-import com.twu.biblioteca.MenuOptions.Quit;
-import com.twu.biblioteca.MenuOptions.ReturnItem;
+import com.twu.biblioteca.MenuOptions.*;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
@@ -35,8 +31,9 @@ public class BibliotecaApp {
         CheckOutItem checkOutMovie = new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator);
         ReturnItem returnBook = new ReturnItem(library, consolePrinter, Book.class, consoleHelper, userValidator);
         ReturnItem returnMovie = new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator);
+        GetDetails getDetails = new GetDetails(library, consolePrinter, userValidator);
         Quit quit = new Quit(consoleTerminator);
-        new Console(library, consolePrinter, consoleReader, consoleTerminator, consoleHelper, userValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, quit).processUserInput();
+        new Console(consolePrinter, consoleReader, consoleHelper, userValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie, getDetails, quit).processUserInput();
     }
 
 }

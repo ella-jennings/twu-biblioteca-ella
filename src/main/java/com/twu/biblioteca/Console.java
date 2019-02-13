@@ -9,7 +9,6 @@ import java.util.Map;
 class Console {
     private final ConsolePrinter consolePrinter;
     private ConsoleReader consoleReader;
-    private ConsoleTerminator consoleTerminator;
     private ConsoleHelper consoleHelper;
     private UserValidator userValidator;
     private final ListItems listBook;
@@ -18,18 +17,16 @@ class Console {
     private final CheckOutItem checkOutMovie;
     private final ReturnItem returnBook;
     private final ReturnItem returnMovie;
+    private GetDetails getDetails;
     private Quit quit;
-    private Library library;
     private Map<String, IMenuOption> menuOptionMap;
     private static final String ERROR_MESSAGE = "Please select a valid option!";
     private static final String WELCOME_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
 
 
-    Console(Library library, ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleTerminator consoleTerminator, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie, Quit quit) {
-        this.library = library;
+    Console(ConsolePrinter consolePrinter, ConsoleReader reader, ConsoleHelper consoleHelper, UserValidator userValidator, ListItems listBook, ListItems listMovie, CheckOutItem checkOutBook, CheckOutItem checkOutMovie, ReturnItem returnBook, ReturnItem returnMovie, GetDetails getDetails, Quit quit) {
         this.consolePrinter = consolePrinter;
         this.consoleReader = reader;
-        this.consoleTerminator = consoleTerminator;
         this.consoleHelper = consoleHelper;
         this.userValidator = userValidator;
         this.listBook = listBook;
@@ -38,6 +35,7 @@ class Console {
         this.checkOutMovie = checkOutMovie;
         this.returnBook = returnBook;
         this.returnMovie = returnMovie;
+        this.getDetails = getDetails;
         this.quit = quit;
         setUpOptions();
         this.consolePrinter.printLine(WELCOME_MESSAGE);
@@ -55,7 +53,7 @@ class Console {
                 put("5", checkOutMovie);
                 put("6", returnMovie);
                 put("L", new Login(userValidator));
-                put("D", new GetDetails(library, consolePrinter, userValidator));
+                put("D", getDetails);
                 put("Q", quit);
             }
         };

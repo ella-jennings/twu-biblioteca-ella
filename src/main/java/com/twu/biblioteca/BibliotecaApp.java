@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.CheckOutItem;
+import com.twu.biblioteca.MenuOptions.ListItems;
 import com.twu.biblioteca.MenuOptions.ReturnItem;
 
 import java.io.IOException;
@@ -27,11 +28,13 @@ public class BibliotecaApp {
         ConsoleTerminator consoleTerminator = new ConsoleTerminator();
         ConsoleHelper consoleHelper = new ConsoleHelper(consolePrinter, consoleReader);
         UserValidator userValidator = new UserValidator(consoleReader, consolePrinter, library);
+        ListItems listBook = new ListItems(library, consolePrinter, Book.class);
+        ListItems listMovie = new ListItems(library, consolePrinter, Movie.class);
         CheckOutItem checkOutBook = new CheckOutItem(library, consolePrinter, Book.class, consoleHelper, userValidator);
         CheckOutItem checkOutMovie = new CheckOutItem(library, consolePrinter, Movie.class, consoleHelper, userValidator);
         ReturnItem returnBook = new ReturnItem(library, consolePrinter, Book.class, consoleHelper, userValidator);
         ReturnItem returnMovie = new ReturnItem(library, consolePrinter, Movie.class, consoleHelper, userValidator);
-        new Console(library, consolePrinter, consoleReader, consoleTerminator, consoleHelper, userValidator, checkOutBook, checkOutMovie, returnBook, returnMovie).processUserInput();
+        new Console(library, consolePrinter, consoleReader, consoleTerminator, consoleHelper, userValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie).processUserInput();
     }
 
 }

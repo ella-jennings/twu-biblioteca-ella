@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.LibraryItems.Movie;
 import com.twu.biblioteca.MenuOptions.CheckOutItem;
+import com.twu.biblioteca.MenuOptions.ListItems;
 import com.twu.biblioteca.MenuOptions.ReturnItem;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,6 +52,10 @@ public class ConsoleTests {
     @Mock
     ConsoleHelper mockConsoleHelper;
     @Mock
+    ListItems listBook;
+    @Mock
+    ListItems listMovie;
+    @Mock
     CheckOutItem checkOutBook;
     @Mock
     CheckOutItem checkOutMovie;
@@ -67,8 +72,8 @@ public class ConsoleTests {
         MockitoAnnotations.initMocks(this);
         when(mockConsoleHelper.getMenu(false)).thenReturn(MENU);
         when(mockConsoleHelper.getMenu(true)).thenReturn(LOGGED_IN_MENU);
-        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator, checkOutBook, checkOutMovie, returnBook, returnMovie);
-        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, checkOutBook, checkOutMovie, returnBook, returnMovie);
+        console = new Console(mockLibrary, mockConsolePrinter, mockConsoleReader, mockConsoleTerminator, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie);
+        orderVerifier = inOrder(mockConsolePrinter, mockLibrary, mockConsoleTerminator, mockConsoleReader, mockConsoleHelper, mockUserValidator, listBook, listMovie, checkOutBook, checkOutMovie, returnBook, returnMovie);
 
 
     }
@@ -79,21 +84,6 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsoleHelper).getMenu(false);
         orderVerifier.verify(mockConsolePrinter).print(MENU);
         orderVerifier.verifyNoMoreInteractions();
-    }
-
-    @Test
-    public void ProcessUserInputCallsLibraryDisplayBooksIfOption1Selected() throws IOException {
-        when(mockConsoleReader.getNextLine()).thenReturn("1", QUIT_APPLICATION);
-        when(mockLibrary.getInformation(Book.class)).thenReturn(BOOK_INFO);
-
-        console.processUserInput();
-        orderVerifier.verify(mockConsolePrinter).printLine(WELCOME_MESSAGE);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockConsolePrinter).printLine(BOOK_INFO);
-        orderVerifier.verify(mockConsolePrinter).print(MENU);
-        orderVerifier.verify(mockConsoleReader).getNextLine();
-        orderVerifier.verify(mockConsoleTerminator).exitApplication();
     }
 
     @Test
@@ -149,6 +139,17 @@ public class ConsoleTests {
         orderVerifier.verify(mockConsolePrinter).printLine(ERROR_MESSAGE);
     }
 
+    // Book Tests
+
+    @Test
+    public void UserCanViewListOfBooks() throws IOException {
+        when(mockConsoleReader.getNextLine()).thenReturn("1", QUIT_APPLICATION);
+        console.processUserInput();
+
+        orderVerifier.verify(listBook).executeOption();
+        orderVerifier.verify(mockConsolePrinter).print(MENU);
+    }
+
     @Test
     public void UserCanCheckOutBook() throws IOException {
         when(mockConsoleReader.getNextLine()).thenReturn("2", QUIT_APPLICATION);
@@ -174,13 +175,10 @@ public class ConsoleTests {
 
     @Test
     public void UserCanViewListOfMovies() throws IOException {
-        String movieInfo = "Here's some movie info";
         when(mockConsoleReader.getNextLine()).thenReturn("4", QUIT_APPLICATION);
-        when(mockLibrary.getInformation(Movie.class)).thenReturn(movieInfo);
         console.processUserInput();
 
-        orderVerifier.verify(mockLibrary, times(1)).getInformation(Movie.class);
-        orderVerifier.verify(mockConsolePrinter, times(1)).printLine(movieInfo);
+        orderVerifier.verify(listMovie).executeOption();
         orderVerifier.verify(mockConsolePrinter).print(MENU);
     }
 
